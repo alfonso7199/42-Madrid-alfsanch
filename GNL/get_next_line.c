@@ -1,10 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alfsanch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/06 17:14:58 by alfsanch          #+#    #+#             */
+/*   Updated: 2024/11/06 17:15:04 by alfsanch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
-static char *extract_line(char **buffer) {
-    char *line;
-    char *newline_pos = ft_strchr(*buffer, '\n');
+static char	*extract_line(char **buffer)
+{
+    char	*line;
+    char	*newline_pos;
     size_t len = newline_pos ? newline_pos - *buffer + 1 : ft_strlen(*buffer);
 
+	*newline_pos = ft_strchr(*buffer, '\n');
     line = malloc(len + 1);
     if (!line)
         return NULL;
