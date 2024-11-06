@@ -1,54 +1,99 @@
 #include "get_next_line.h"
 
-static char *extract_line(char **buffer) {
-    char *line;
-    char *newline_pos = ft_strchr(*buffer, '\n');
-    size_t len = newline_pos ? newline_pos - *buffer + 1 : ft_strlen(*buffer);
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	size_t	i;
+	size_t	j;
+	size_t	newstr;
+	char	*s3;
 
-    line = malloc(len + 1);
-    if (!line)
-        return NULL;
-
-    for (size_t i = 0; i < len; i++)
-        line[i] = (*buffer)[i];
-    line[len] = '\0';
-
-    if (newline_pos) {
-        char *temp = ft_strjoin(newline_pos + 1, ""); 
-        free(*buffer);
-        *buffer = temp;
-    } else {
-        free(*buffer);
-        *buffer = NULL;
-    }
-    return line;
+	i = 0;
+	j = 0;
+	newstr = ft_strlen(s1) + ft_strlen(s2);
+	s3 = malloc(newstr +1);
+	if (s3 == NULL)
+		return (NULL);
+	while (s1[i] != '\0')
+	{
+		s3[i] = s1[i];
+		i++;
+	}
+	while (s2[j] != '\0')
+	{
+		s3[i] = s2[j];
+		i++;
+		j++;
+	}
+	s3[i] = '\0';
+	return (s3);
 }
 
-static int read_to_buffer(int fd, char **buffer) {
-    char *temp_buffer = malloc(BUFFER_SIZE + 1);
-    if (!temp_buffer)
-        return -1;
+char	*ft_strchr(const char *str, int c)
+{
+	unsigned char	uc;
 
-    int bytes_read = read(fd, temp_buffer, BUFFER_SIZE);
-    if (bytes_read > 0) {
-        temp_buffer[bytes_read] = '\0';
-        *buffer = ft_strjoin(*buffer, temp_buffer);
-    }
-    free(temp_buffer);
-    return bytes_read;
+	uc = (unsigned char)c;
+	while (*str)
+	{
+		if (*str == uc)
+			return ((char *)str);
+		str++;
+	}
+	if (uc == '\0')
+		return ((char *)str);
+	return (0);
 }
+char	*ft_strdup(const char *s1)
+{
+	size_t	len;
+	char	*s2;
+	size_t	i;
 
-char *get_next_line(int fd) {
-    static char *buffer = NULL;
-    if (fd < 0 || BUFFER_SIZE <= 0)
-        return NULL;
+	i = 0;
+	len = ft_strlen(s1);
+	s2 = malloc(len + 1);
+	if (s2 == NULL)
+		return (NULL);
+	while (s1[i] != '\0')
+	{
+		s2[i] = s1[i];
+		i++;
+	}
+	s2[i] = '\0';
+	return (s2);
+}
+char	*ft_substr(const char *s, unsigned int start, size_t len)
+{
+	size_t	s_len;
+	char	*substr;
 
-    int bytes_read = 1;
-    while (bytes_read > 0 && !ft_strchr(buffer, '\n'))
-        bytes_read = read_to_buffer(fd, &buffer);
+	if (!s)
+		return (NULL);
+	s_len = ft_strlen(s);
+	if (start >= s_len)
+	{
+		return (ft_strdup(""));
+	}
+	if (len > s_len)
+		len = s_len;
+	
+	substr = (char *)malloc(len +  1);
 
-    if (bytes_read < 0 || (bytes_read == 0 && !buffer))
-        return NULL;
+	printf("len %ld\n", len);
+	if (!substr)
+		return (NULL);
+	ft_strlcpy(substr, s + start, len + 1);
+	return (substr);
+}
+size_t	ft_strlen(const char *str)
+{
+	int	len;
 
-    return extract_line(&buffer);
+	len = 0;
+	while (*str)
+	{
+		len++;
+		str++;
+	}
+	return (len);
 }

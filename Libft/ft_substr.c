@@ -38,10 +38,10 @@ char	*ft_substr(const char *s, unsigned int start, size_t len)
 	return (substr);
 }
 
-int main(void) {
-    const char *str = "123456";
-    unsigned int start = 5;
-    size_t len = 5;
-	char *substr = ft_substr(str, start, len);
-    printf("Subcadena desde índice %u: '%s'\n", start, substr);
-}
+// int main(void) {
+//     const char *str = "123456";
+//     unsigned int start = 5;
+//     size_t len = 5;
+// 	char *substr = ft_substr(str, start, len);
+//     printf("Subcadena desde índice %u: '%s'\n", start, substr);
+// }
