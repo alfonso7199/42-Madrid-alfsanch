@@ -28,10 +28,7 @@ char	*ft_substr(const char *s, unsigned int start, size_t len)
 	}
 	if (len > s_len)
 		len = s_len;
-	
 	substr = (char *)malloc(len +  1);
-
-	printf("len %ld\n", len);
 	if (!substr)
 		return (NULL);
 	ft_strlcpy(substr, s + start, len + 1);
