@@ -19,7 +19,7 @@
 # include <fcntl.h>
 
 # ifndef BUFFER_SIZE
-# define BUFFER_SIZE 42
+#  define BUFFER_SIZE 42
 # endif
 
 char	*get_next_line(int fd);
@@ -27,12 +27,10 @@ char	*read_and_append(int fd, char *buffer);
 char	*append_buffer(char *buffer, char *temp);
 char	*extract_line(char *buffer);
 char	*update_buffer(char *buffer);
-char	*ft_strjoin(char *s1, char *s2);
-size_t	ft_strlcpy(char *dst, const char *src, size_t size);
+char	*ft_strjoin(const char *s1, const char *s2);
 char	*ft_strdup(const char *s1);
 char	*ft_substr(const char *s, unsigned int start, size_t len);
-size_t	ft_strlen(char *s);
-char	*ft_strchr(char *s, int c);
-void	*ft_calloc(size_t count, size_t size);
+size_t	ft_strlen(const char *str);
+char	*ft_strchr(const char *str, int c);
 
 #endif
