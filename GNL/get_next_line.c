@@ -96,3 +96,35 @@ char	*get_next_line(int fd)
 	buffer = update_buffer(buffer);
 	return (line);
 }
+
+/*
+int main (int argc, char **argv)
+{
+	int fd;
+	char *line;
+	int i;
+
+
+	if (argc < 2)
+	{
+		printf("Error!\n");
+		return 1;
+	}
+	++argv;
+	while (*argv)
+	{
+		fd = open(*argv, O_RDONLY);
+		printf("\nOpen '%s' file\n", *argv);
+		i = 0;
+		while ((line = get_next_line(fd)))
+		{
+			printf("%i, line: %s", i, line);
+			free(line);
+			i++;
+		}
+		close(fd);
+		printf("\nClose '%s' file\n", *argv);
+		++argv;
+	}
+}
+*/
