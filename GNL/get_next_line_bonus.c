@@ -1,15 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alfsanch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 17:14:58 by alfsanch          #+#    #+#             */
-/*   Updated: 2024/11/06 17:15:04 by alfsanch         ###   ########.fr       */
+/*   Created: 2024/11/18 17:21:55 by alfsanch          #+#    #+#             */
+/*   Updated: 2024/11/18 17:21:58 by alfsanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*append_buffer(char *buffer, char *temp)
 {
@@ -107,7 +107,7 @@ int main (int argc, char **argv)
 
 	if (argc < 2)
 	{
-		printf("No has pasado suficientes argumentos\n");
+		printf("No has passado suficientes argumentos\n");
 		return 1;
 	}
 	++argv;
