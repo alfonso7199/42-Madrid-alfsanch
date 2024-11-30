@@ -14,8 +14,16 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+# include <unistd.h>
 # include <stdarg.h>
 
-int	ft_printf(char const *, ...);
+int	ft_printf(char const *format, ...);
+int ft_convert_char(char c);
+int ft_convert_string(const char *str);
+int ft_convert_pointer(void *ptr);
+int ft_convert_decimal(int num);
+int ft_convert_unsigned(unsigned int num);
+int ft_convert_xX(unsigned int num, char format);
+int ft_convert_percentage(void);
 
 #endif
