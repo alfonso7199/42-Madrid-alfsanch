@@ -87,7 +87,7 @@ char	*get_next_line(int fd)
 	static char	*buffer;
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = read_and_append(fd, buffer);
 	if (!buffer)
@@ -114,7 +114,6 @@ int main (int argc, char **argv)
 	while (*argv)
 	{
 		fd = open(*argv, O_RDONLY);
-		printf("\nOpen '%s' file\n", *argv);
 		i = 0;
 		while ((line = get_next_line(fd)))
 		{
@@ -123,7 +122,6 @@ int main (int argc, char **argv)
 			i++;
 		}
 		close(fd);
-		printf("\nClose '%s' file\n", *argv);
 		++argv;
 	}
 }

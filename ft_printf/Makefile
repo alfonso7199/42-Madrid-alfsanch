@@ -2,12 +2,13 @@ NAME	=	libftprintf.a
 
 SRCS	= \
 		ft_printf.c\
-		ft_ft_convert_char.c\
-		ft_ft_convert_string.c\
+		ft_convert_char.c\
+		ft_convert_string.c\
 		ft_convert_pointer.c\
 		ft_convert_decimal.c\
 		ft_convert_xX.c\
 		ft_convert_percentage.c\
+		ft_convert_unsigned.c
 		
 OBJS	=	$(SRCS:.c=.o)
 

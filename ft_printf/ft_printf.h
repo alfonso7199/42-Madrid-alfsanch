@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: alfsanch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 17:11:37 by alfsanch          #+#    #+#             */
-/*   Updated: 2024/10/14 17:14:21 by alfsanch         ###   ########.fr       */
+/*   Created: 2024/12/04 18:45:36 by alfsanch          #+#    #+#             */
+/*   Updated: 2024/12/04 18:45:42 by alfsanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
@@ -18,12 +19,12 @@
 # include <stdarg.h>
 
 int	ft_printf(char const *format, ...);
-int ft_convert_char(char c);
-int ft_convert_string(const char *str);
-int ft_convert_pointer(void *ptr);
-int ft_convert_decimal(int num);
-int ft_convert_unsigned(unsigned int num);
-int ft_convert_xX(unsigned int num, char format);
-int ft_convert_percentage(void);
+int	ft_convert_char(char c);
+int	ft_convert_string(const char *str);
+int	ft_convert_pointer(void *ptr);
+int	ft_convert_decimal(int num);
+int	ft_convert_unsigned(unsigned int num);
+int	ft_convert_xX(unsigned int num, char format);
+int	ft_convert_percentage(void);
 
 #endif

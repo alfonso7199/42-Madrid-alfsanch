@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
+#include <stdio.h>
 
 char	*append_buffer(char *buffer, char *temp)
 {
@@ -87,7 +88,7 @@ char	*get_next_line(int fd)
 	static char	*buffer;
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = read_and_append(fd, buffer);
 	if (!buffer)
@@ -97,7 +98,6 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-/*
 int main (int argc, char **argv)
 {
 	int fd;
@@ -107,14 +107,13 @@ int main (int argc, char **argv)
 
 	if (argc < 2)
 	{
-		printf("No has pasado suficientes argumentos\n");
+		printf("No has passado suficientes argumentos\n");
 		return 1;
 	}
 	++argv;
 	while (*argv)
 	{
 		fd = open(*argv, O_RDONLY);
-		printf("\nOpen '%s' file\n", *argv);
 		i = 0;
 		while ((line = get_next_line(fd)))
 		{
@@ -123,8 +122,6 @@ int main (int argc, char **argv)
 			i++;
 		}
 		close(fd);
-		printf("\nClose '%s' file\n", *argv);
 		++argv;
 	}
 }
-*/
