@@ -12,37 +12,49 @@
 
 #include "ft_printf.h"
 
-static int	ft_process_format(const char *format, va_list args)
+static int	ft_print_char(int c)
+{
+	write(1, &c, 1);
+	return (1);
+}
+
+static int	ft_format(const char *str, va_list args)
+{
+	if (*str == 'c')
+		return (ft_convert_char(va_arg(args, int)));
+	else if (*str == 's')
+		return (ft_convert_string(va_arg(args, char *)));
+	else if (*str == 'p')
+		return (ft_convert_pointer(va_arg(args, void *)));
+	else if (*str == 'd' || *str == 'i')
+		return (ft_convert_decimal(va_arg(args, int)));
+	else if (*str == 'u')
+		return (ft_convert_unsigned(va_arg(args, unsigned int)));
+	else if (*str == 'x' || *str == 'X')
+		return (ft_convert_xX(va_arg(args, unsigned int), *str));
+	else if (*str == '%')
+		return (ft_convert_percentage());
+	else
+		return (ft_print_char(*str));
+
+}
+
+static int	ft_str(const char *str, va_list args)
 {
 	int	p_chars;
 
 	p_chars = 0;
-	while (*format)
+	while (*str)
 	{
-		if (*format == '%')
+		if (*str == '%')
 		{
-			format++;
-			if (*format == 'c')
-				p_chars += ft_convert_char(va_arg(args, int));
-			else if (*format == 's')
-				p_chars += ft_convert_string(va_arg(args, char *));
-			else if (*format == 'p')
-				p_chars += ft_convert_pointer(va_arg(args, void *));
-			else if (*format == 'd' || *format == 'i')
-				p_chars += ft_convert_decimal(va_arg(args, int));
-			else if (*format == 'u')
-				p_chars += ft_convert_unsigned(va_arg(args, unsigned int));
-			else if (*format == 'x' || *format == 'X')
-				p_chars += ft_convert_xX(va_arg(args, unsigned int), *format);
-			else if (*format == '%')
-				p_chars += ft_convert_percentage();
+			str++;
+			if (*str)
+				p_chars += ft_format(str, args);
 		}
 		else
-		{
-			write(1, format, 1);
-			p_chars++;
-		}
-		format++;
+			p_chars += ft_print_char(*str);
+		str++;
 	}
 	return (p_chars);
 }
@@ -53,7 +65,7 @@ int	ft_printf(const char *format, ...)
 	int		result;
 
 	va_start(args, format);
-	result = ft_process_format(format, args);
+	result = ft_str(format, args);
 	va_end(args);
 	return (result);
 }
