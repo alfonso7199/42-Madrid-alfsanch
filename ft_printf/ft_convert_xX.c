@@ -19,7 +19,7 @@ static void	ft_putnbr_base(unsigned int num, char *base, int *count)
 	*count += write(1, &base[num % 16], 1);
 }
 
-int	ft_convert_xx(unsigned int num, char format)
+int	ft_convert_xX(unsigned int num, char format)
 {
 	int		count;
 	char	*base;
