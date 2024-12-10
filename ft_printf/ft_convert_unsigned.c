@@ -9,6 +9,7 @@
 /*   Updated: 2024/12/04 18:43:47 by alfsanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "ft_printf.h"
 
 static void	ft_putnbr(long n, int *count)
 {
@@ -16,9 +17,8 @@ static void	ft_putnbr(long n, int *count)
 
 	if (n < 0)
 	{
-		*count = write(1, "-", 1);
+		*count += write(1, "-", 1);
 		n = -n;
-		++count;
 	}
 	if (n >= 10)
 		ft_putnbr(n / 10, count);
