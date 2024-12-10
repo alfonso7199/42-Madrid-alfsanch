@@ -36,7 +36,6 @@ static int	ft_format(const char *str, va_list args)
 		return (ft_convert_percentage());
 	else
 		return (ft_print_char(*str));
-
 }
 
 static int	ft_str(const char *str, va_list args)

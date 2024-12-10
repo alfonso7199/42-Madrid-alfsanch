@@ -19,13 +19,13 @@ static void	ft_putnbr_base(unsigned int num, char *base, int *count)
 	*count += write(1, &base[num % 16], 1);
 }
 
-int	ft_convert_xx(unsigned int num, char formateo)
+int	ft_convert_xx(unsigned int num, char format)
 {
 	int		count;
 	char	*base;
 
 	count = 0;
-	if (formateo == 'x')
+	if (format == 'x')
 		base = "0123456789abcdef";
 	else
 		base = "0123456789ABCDEF";
