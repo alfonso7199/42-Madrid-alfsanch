@@ -12,12 +12,6 @@
 
 #include "ft_printf.h"
 
-static int	ft_print_char(int c)
-{
-	write(1, &c, 1);
-	return (1);
-}
-
 static int	ft_format(const char *str, va_list args)
 {
 	if (*str == 'c')
@@ -35,7 +29,7 @@ static int	ft_format(const char *str, va_list args)
 	else if (*str == '%')
 		return (ft_convert_percentage());
 	else
-		return (ft_print_char(*str));
+		return (ft_convert_char(*str));
 
 }
 
