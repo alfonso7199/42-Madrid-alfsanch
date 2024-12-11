@@ -31,7 +31,7 @@ static int	ft_format(const char *str, va_list args)
 	else if (*str == 'u')
 		return (ft_convert_unsigned(va_arg(args, unsigned int)));
 	else if (*str == 'x' || *str == 'X')
-		return (ft_convert_xX(va_arg(args, unsigned int), *str));
+		return (ft_convert_hexa(va_arg(args, unsigned int), *str));
 	else if (*str == '%')
 		return (ft_convert_percentage());
 	else

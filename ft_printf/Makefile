@@ -6,7 +6,7 @@ SRCS	= \
 		ft_convert_string.c\
 		ft_convert_pointer.c\
 		ft_convert_decimal.c\
-		ft_convert_xX.c\
+		ft_convert_hexa.c\
 		ft_convert_percentage.c\
 		ft_convert_unsigned.c
 		
