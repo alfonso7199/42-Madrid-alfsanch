@@ -24,10 +24,12 @@ int	ft_convert_pointer(void *ptr)
 	int	count;
 
 	count = 0;
-	count += write(1, "0x", 2);
 	if (!ptr)
-		count += write(1, "0", 1);
+		count += write(1, "(nil)", 5);
 	else
+	{
+		count += write(1, "0x", 2);
 		ft_putnbr_base((unsigned long)ptr, "0123456789abcdef", &count);
+	}
 	return (count);
 }
