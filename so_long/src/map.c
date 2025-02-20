@@ -1,6 +1,7 @@
 #include "so_long.h"
 
 void load_map(t_game *game, const char *filename) {
+    printf("Cargando mapa desde: %s\n", filename);
     int fd = open(filename, O_RDONLY);
     if (fd < 0) {
         error_exit("Error al abrir el archivo del mapa");
@@ -36,23 +37,43 @@ void load_map(t_game *game, const char *filename) {
     }
 }
 
-void flood_fill(char **map, int y, int x, int rows, int cols, int *c_count, int *e_reached) {
-    if (y < 0 || y >= rows || x < 0 || x >= cols || map[y][x] == '1' || map[y][x] == 'V') 
-        return;
+typedef struct s_point {
+    int y;
+    int x;
+} t_point;
 
-    if (map[y][x] == 'C') (*c_count)--;
-    if (map[y][x] == 'E') (*e_reached) = 1;
+void flood_fill(char **map, int rows, int cols, int start_y, int start_x, int *c_count, int *e_reached) {
+    t_point *stack = malloc(sizeof(t_point) * (rows * cols));
+    if (!stack)
+        error_exit("Error: No se pudo asignar memoria para flood fill iterativo");
+    int top = 0;
+    stack[top++] = (t_point){start_y, start_x};
 
-    char temp = map[y][x];
-    map[y][x] = 'V'; 
+    while (top > 0) {
+        t_point p = stack[--top];
+        int y = p.y;
+        int x = p.x;
 
-    flood_fill(map, y + 1, x, rows, cols, c_count, e_reached);
-    flood_fill(map, y - 1, x, rows, cols, c_count, e_reached);
-    flood_fill(map, y, x + 1, rows, cols, c_count, e_reached);
-    flood_fill(map, y, x - 1, rows, cols, c_count, e_reached);
+        if (y < 0 || y >= rows || x < 0 || x >= cols)
+            continue;
+        if (map[y][x] == '1' || map[y][x] == 'V')
+            continue;
 
-    map[y][x] = temp; 
+        if (map[y][x] == 'C')
+            (*c_count)--;
+        if (map[y][x] == 'E')
+            *e_reached = 1;
+
+        map[y][x] = 'V';
+
+        stack[top++] = (t_point){y + 1, x};
+        stack[top++] = (t_point){y - 1, x};
+        stack[top++] = (t_point){y, x + 1};
+        stack[top++] = (t_point){y, x - 1};
+    }
+    free(stack);
 }
+
 
 void check_valid_path(t_game *game) {
     int c_count = game->collectibles;
@@ -63,7 +84,7 @@ void check_valid_path(t_game *game) {
         temp_map[i] = ft_strdup(game->map[i]);
     }
 
-    flood_fill(temp_map, game->player_y, game->player_x, game->rows, game->cols, &c_count, &e_reached);
+    flood_fill(temp_map, game->rows, game->cols, game->player_y, game->player_x, &c_count, &e_reached);
 
     for (size_t i = 0; i < game->rows; i++) {
         free(temp_map[i]);
@@ -77,6 +98,7 @@ void check_valid_path(t_game *game) {
 }
 
 void validate_map(t_game *game) {
+    printf("Validando mapa...\n");
     int p_count = 0, e_count = 0, c_count = 0;
 
     for (size_t y = 0; y < game->rows; y++) {
