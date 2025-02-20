@@ -11,6 +11,7 @@ void init_game(t_game *game) {
     game->player = mlx_xpm_file_to_image(game->mlx, "textures/player.xpm", &tile_size, &tile_size);
     game->collectible = mlx_xpm_file_to_image(game->mlx, "textures/collectible.xpm", &tile_size, &tile_size);
     game->exit = mlx_xpm_file_to_image(game->mlx, "textures/exit.xpm", &tile_size, &tile_size);
+    game->exit2 = mlx_xpm_file_to_image(game->mlx, "textures/exit2.xpm", &tile_size, &tile_size); 
     game->floor = mlx_xpm_file_to_image(game->mlx, "textures/tile1.xpm", &tile_size, &tile_size);
 
     if (!game->wall) printf("Error: No se pudo cargar wall.xpm\n");

@@ -16,7 +16,11 @@ void render_map(t_game *game) {
             } else if (game->map[y][x] == 'C') {
                 mlx_put_image_to_window(game->mlx, game->win, game->collectible, x * TILE_SIZE, y * TILE_SIZE);
             } else if (game->map[y][x] == 'E') {
-                mlx_put_image_to_window(game->mlx, game->win, game->exit, x * TILE_SIZE, y * TILE_SIZE);
+                if (game->collectibles == 0) {
+                    mlx_put_image_to_window(game->mlx, game->win, game->exit2, x * TILE_SIZE, y * TILE_SIZE);
+                } else {
+                    mlx_put_image_to_window(game->mlx, game->win, game->exit, x * TILE_SIZE, y * TILE_SIZE);
+                }
             } else if (game->map[y][x] == 'P') {
                 void *player_sprite = NULL;
                 if (game->direction == 0) { 

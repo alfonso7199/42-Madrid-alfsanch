@@ -27,6 +27,7 @@ typedef struct s_game {
     void    *player;
     void    *collectible;
     void    *exit;
+    void    *exit2;
     void    *floor;
     void    *player_up[4];
     void    *player_down[4];
