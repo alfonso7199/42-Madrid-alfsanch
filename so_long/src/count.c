@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   map_validation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alfsanch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,21 +9,29 @@
 /*   Updated: 2024/07/17 17:05:05 by alfsanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "so_long.h"
 
-int	main(int argc, char **argv)
+void	count_player(t_game *game, t_point coords, t_counts *counts)
 {
-	t_game	game;
+	game->player_x = coords.x;
+	game->player_y = coords.y;
+	counts->p_count++;
+}
 
-	if (argc != 2)
-		error_exit("Error: ./so_long map.ber");
-	ft_bzero(&game, sizeof(t_game));
-	load_map(&game, argv[1]);
-	validate_map(&game);
-	check_valid_path(&game);
-	init_game(&game);
-	mlx_key_hook(game.win, handle_keypress, &game);
-	mlx_hook(game.win, 17, 0, close_game, &game);
-	mlx_loop(game.mlx);
-	return (0);
+void	count_exit(t_game *game, t_point coords, t_counts *counts)
+{
+	game->exit_x = coords.x;
+	game->exit_y = coords.y;
+	counts->e_count++;
+}
+
+void	count_elements(t_game *game, char c, t_point coords, t_counts *counts)
+{
+	if (c == 'P')
+		count_player(game, coords, counts);
+	else if (c == 'E')
+		count_exit(game, coords, counts);
+	else if (c == 'C')
+		counts->c_count++;
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   render_map.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alfsanch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,19 +11,41 @@
 /* ************************************************************************** */
 #include "so_long.h"
 
-int	main(int argc, char **argv)
+static void	render_floor(t_game *game)
 {
-	t_game	game;
+	size_t	y;
+	size_t	x;
 
-	if (argc != 2)
-		error_exit("Error: ./so_long map.ber");
-	ft_bzero(&game, sizeof(t_game));
-	load_map(&game, argv[1]);
-	validate_map(&game);
-	check_valid_path(&game);
-	init_game(&game);
-	mlx_key_hook(game.win, handle_keypress, &game);
-	mlx_hook(game.win, 17, 0, close_game, &game);
-	mlx_loop(game.mlx);
-	return (0);
+	y = 0;
+	while (y < game->rows)
+	{
+		x = 0;
+		while (x < game->cols)
+		{
+			mlx_put_image_to_window(game->mlx, game->win, game->floor,
+				x * TILE_SIZE, y * TILE_SIZE);
+			x++;
+		}
+		y++;
+	}
+}
+
+void	render_map(t_game *game)
+{
+	size_t	y;
+	size_t	x;
+
+	mlx_clear_window(game->mlx, game->win);
+	render_floor(game);
+	y = 0;
+	while (y < game->rows)
+	{
+		x = 0;
+		while (x < game->cols)
+		{
+			render_tile(game, y, x);
+			x++;
+		}
+		y++;
+	}
 }
