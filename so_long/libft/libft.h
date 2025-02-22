@@ -56,5 +56,4 @@ int		ft_toupper(int c);
 int		ft_tolower(int c);
 char	*get_next_line(int fd);
 
-
 #endif
