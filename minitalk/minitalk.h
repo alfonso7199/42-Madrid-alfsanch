@@ -23,13 +23,13 @@ typedef struct s_mini
 	int	pid_client;
 }	t_mini;
 
-t_mini	*client_start(void);
-t_mini	*server_start(void);
-void	client_send(t_mini *talk, char *message);
-void	server_receive(int boolean);
+void	send_bit(int pid, char c);
+void	send_message(int pid, char *message);
+void	ack_handler(int sig);
+void	handle_signal(int sig, siginfo_t *info, void *context);
+void	setup_signal_handlers(void);
 int		ft_atoi(const char *str);
 void	ft_putstr(char *str);
 void	ft_putnbr(int num);
-void	handle_signal(int sig, siginfo_t *info, void *context);
 
 #endif
