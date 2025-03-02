@@ -1,5 +1,6 @@
 {
     "files.associations": {
         "*.xpm": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
