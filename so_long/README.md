@@ -26,7 +26,6 @@ Para ejecutar el juego, usa:
 ./so_long maps/mapa1.ber
 ````
 
-🖼️ Capturas de Pantalla
-Aquí tienes una vista previa del juego en acción:
+🖼️ Aquí tienes una vista previa del juego en acción:
 
 ![Gameplay](gif/gameplay.gif)
