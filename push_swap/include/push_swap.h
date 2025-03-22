@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alfsanch <alfsanch@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/06 17:14:58 by alfsanch          #+#    #+#             */
+/*   Updated: 2024/11/06 17:15:04 by alfsanch         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
@@ -7,12 +18,12 @@
 # include <limits.h>
 # include "../libft/libft.h"
 
-typedef struct s_stack {
+typedef struct s_stack
+{
 	int				value;
 	int				index;
 	struct s_stack	*next;
 }	t_stack;
-
 
 void	swap(t_stack **head);
 void	swap_a(t_stack **head);
@@ -29,6 +40,5 @@ void	rrotate(t_stack **head);
 void	reverse_rotate_a(t_stack **head);
 void	reverse_rotate_b(t_stack **head);
 void	reverse_rotate_ab(t_stack **stack_a, t_stack **stack_b);
-
 
 #endif
