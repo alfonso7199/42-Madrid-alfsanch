@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   index_management.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alfsanch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,20 +11,27 @@
 /* ************************************************************************** */
 #include "push_swap.h"
 
-int	main(int argc, char **argv)
+void	assign_indexes(t_stack *stack, int stack_size)
 {
-	t_stack	*stack_a;
-	t_stack	*stack_b;
+	t_stack	*current;
+	t_stack	*max_node;
+	int		max_value;
 
-	if (argc < 2)
-		return (EXIT_SUCCESS);
-	validate_input(argc, argv);
-	stack_a = create_stack(argc, argv);
-	stack_b = NULL;
-	assign_indexes(stack_a, stack_size(stack_a));
-	if (!is_sorted(stack_a))
-		sort_stack(&stack_a, &stack_b);
-	free_stack(&stack_a);
-	free_stack(&stack_b);
-	return (EXIT_SUCCESS);
+	while (stack_size-- > 0)
+	{
+		max_value = INT_MIN;
+		max_node = NULL;
+		current = stack;
+		while (current)
+		{
+			if (!current->index && current->value >= max_value)
+			{
+				max_value = current->value;
+				max_node = current;
+			}
+			current = current->next;
+		}
+		if (max_node)
+			max_node->index = stack_size;
+	}
 }

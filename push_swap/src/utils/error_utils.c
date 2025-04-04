@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   error_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alfsanch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,20 +11,9 @@
 /* ************************************************************************** */
 #include "push_swap.h"
 
-int	main(int argc, char **argv)
+void	error_exit(char *message)
 {
-	t_stack	*stack_a;
-	t_stack	*stack_b;
-
-	if (argc < 2)
-		return (EXIT_SUCCESS);
-	validate_input(argc, argv);
-	stack_a = create_stack(argc, argv);
-	stack_b = NULL;
-	assign_indexes(stack_a, stack_size(stack_a));
-	if (!is_sorted(stack_a))
-		sort_stack(&stack_a, &stack_b);
-	free_stack(&stack_a);
-	free_stack(&stack_b);
-	return (EXIT_SUCCESS);
+	(void)message;
+	write(2, "Error\n", 6);
+	exit(1);
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   memory_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alfsanch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,20 +11,34 @@
 /* ************************************************************************** */
 #include "push_swap.h"
 
-int	main(int argc, char **argv)
+void	free_stack(t_stack **stack)
 {
-	t_stack	*stack_a;
-	t_stack	*stack_b;
+	t_stack	*tmp;
+	t_stack	*current;
 
-	if (argc < 2)
-		return (EXIT_SUCCESS);
-	validate_input(argc, argv);
-	stack_a = create_stack(argc, argv);
-	stack_b = NULL;
-	assign_indexes(stack_a, stack_size(stack_a));
-	if (!is_sorted(stack_a))
-		sort_stack(&stack_a, &stack_b);
-	free_stack(&stack_a);
-	free_stack(&stack_b);
-	return (EXIT_SUCCESS);
+	if (!stack || !*stack)
+		return ;
+	current = *stack;
+	while (current)
+	{
+		tmp = current->next;
+		free(current);
+		current = tmp;
+	}
+	*stack = NULL;
+}
+
+void	free_string_array(char **array)
+{
+	int	i;
+
+	i = 0;
+	if (!array)
+		return ;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
 }

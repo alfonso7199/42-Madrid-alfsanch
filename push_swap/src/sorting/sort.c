@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   sort.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alfsanch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,20 +11,17 @@
 /* ************************************************************************** */
 #include "push_swap.h"
 
-int	main(int argc, char **argv)
+void	sort_stack(t_stack **a, t_stack **b)
 {
-	t_stack	*stack_a;
-	t_stack	*stack_b;
+	int	size;
 
-	if (argc < 2)
-		return (EXIT_SUCCESS);
-	validate_input(argc, argv);
-	stack_a = create_stack(argc, argv);
-	stack_b = NULL;
-	assign_indexes(stack_a, stack_size(stack_a));
-	if (!is_sorted(stack_a))
-		sort_stack(&stack_a, &stack_b);
-	free_stack(&stack_a);
-	free_stack(&stack_b);
-	return (EXIT_SUCCESS);
+	size = stack_size(*a);
+	if (is_sorted(*a))
+		return ;
+	if (size <= 3)
+		sort_three(a);
+	else if (size <= 5)
+		sort_five(a, b);
+	else
+		sort_large(a, b, size);
 }

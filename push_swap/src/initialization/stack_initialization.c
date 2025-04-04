@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   stack_initialization.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alfsanch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,20 +11,27 @@
 /* ************************************************************************** */
 #include "push_swap.h"
 
-int	main(int argc, char **argv)
+t_stack	*create_stack(int argc, char **argv)
 {
-	t_stack	*stack_a;
-	t_stack	*stack_b;
+	t_stack	*stack;
+	char	**args;
+	int		i;
 
-	if (argc < 2)
-		return (EXIT_SUCCESS);
-	validate_input(argc, argv);
-	stack_a = create_stack(argc, argv);
-	stack_b = NULL;
-	assign_indexes(stack_a, stack_size(stack_a));
-	if (!is_sorted(stack_a))
-		sort_stack(&stack_a, &stack_b);
-	free_stack(&stack_a);
-	free_stack(&stack_b);
-	return (EXIT_SUCCESS);
+	stack = NULL;
+	i = 0;
+	if (argc == 2)
+		args = ft_split(argv[1], ' ');
+	else
+	{
+		i = 1;
+		args = argv;
+	}
+	while (args[i])
+	{
+		append_node(&stack, ft_atoi(args[i]));
+		i++;
+	}
+	if (argc == 2)
+		free_string_array(args);
+	return (stack);
 }

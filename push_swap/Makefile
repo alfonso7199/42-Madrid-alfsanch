@@ -1,53 +1,57 @@
-NAME = push_swap
+NAME		= push_swap
+CC			= cc
+CFLAGS		= -Wall -Wextra -Werror
+INCLUDE_DIR = ./include
+LIBFT_DIR	= ./libft
+LIBFT		= $(LIBFT_DIR)/libft.a
+LIBFT_FLAGS	= -L$(LIBFT_DIR) -lft
 
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
+SRC_DIR		= ./src
+INIT_DIR	= $(SRC_DIR)/initialization
+VAL_DIR		= $(SRC_DIR)/validation
+OP_DIR		= $(SRC_DIR)/operations
+SORT_DIR	= $(SRC_DIR)/sorting
+UTILS_DIR	= $(SRC_DIR)/utils
 
-OBJ_DIR = obj
-SRC_DIR = ./src
-OPERATIONS_DIR = $(SRC_DIR)/operations
-LIBFT_DIR = ./libft
-INCLUDE = ./include
+OBJ_DIR		= obj
 
-SRC =	$(SRC_DIR)/initialize.c $(SRC_DIR)/linked_list.c		\
-		$(SRC_DIR)/miscellaneous.c $(SRC_DIR)/push_swap.c		\
-		$(SRC_DIR)/push.c $(SRC_DIR)/r_rotate.c				\
-		$(SRC_DIR)/rotate.c $(SRC_DIR)/sorting.c				\
-		$(SRC_DIR)/swap.c $(SRC_DIR)/input_check.c			\
-		$(SRC_DIR)/sort_util.c								\
-		$(OPERATIONS_DIR)/pa.c $(OPERATIONS_DIR)/pb.c		\
-		$(OPERATIONS_DIR)/ra.c $(OPERATIONS_DIR)/rb.c		\
-		$(OPERATIONS_DIR)/rr.c $(OPERATIONS_DIR)/rra.c		\
-		$(OPERATIONS_DIR)/rrb.c $(OPERATIONS_DIR)/rrr.c		\
-		$(OPERATIONS_DIR)/sa.c $(OPERATIONS_DIR)/sb.c		\
-		$(OPERATIONS_DIR)/ss.c
+SRC_FILES	= \
+    $(SRC_DIR)/push_swap.c \
+	$(INIT_DIR)/stack_initialization.c \
+	$(INIT_DIR)/index_management.c \
+	$(VAL_DIR)/input_validation.c \
+	$(OP_DIR)/push.c \
+	$(OP_DIR)/rotate.c \
+	$(OP_DIR)/reverse_rotate.c \
+	$(OP_DIR)/swap.c \
+	$(SORT_DIR)/sort.c \
+	$(SORT_DIR)/small_sort.c \
+	$(UTILS_DIR)/sort_utils.c \
+	$(SORT_DIR)/sort_large.c \
+	$(UTILS_DIR)/stack_utils.c \
+	$(UTILS_DIR)/error_utils.c \
+	$(UTILS_DIR)/memory_utils.c
 
-OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-
-LIBFT = $(LIBFT_DIR)/libft.a
-LIBFT_FLAGS = -L$(LIBFT_DIR) -lft
-
-INCLUDE = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
+OBJS        = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT_FLAGS)
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT_FLAGS) -o $(NAME)
 
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)
-	@mkdir -p $(OBJ_DIR)/operations
-	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -I$(LIBFT_DIR) -c $< -o $@
 
 clean:
-	rm -f $(OBJ_DIR)
+	@rm -rf $(OBJ_DIR)
 	@$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all

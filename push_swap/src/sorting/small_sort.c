@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   small_sort.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alfsanch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,20 +11,37 @@
 /* ************************************************************************** */
 #include "push_swap.h"
 
-int	main(int argc, char **argv)
+void	sort_three(t_stack **stack_a)
 {
-	t_stack	*stack_a;
-	t_stack	*stack_b;
+	int	max;
 
-	if (argc < 2)
-		return (EXIT_SUCCESS);
-	validate_input(argc, argv);
-	stack_a = create_stack(argc, argv);
-	stack_b = NULL;
-	assign_indexes(stack_a, stack_size(stack_a));
-	if (!is_sorted(stack_a))
-		sort_stack(&stack_a, &stack_b);
-	free_stack(&stack_a);
-	free_stack(&stack_b);
-	return (EXIT_SUCCESS);
+	max = find_max_index(*stack_a);
+	if ((*stack_a)->index == max)
+		rotate_a(stack_a);
+	else if ((*stack_a)->next->index == max)
+		reverse_rotate_a(stack_a);
+	if ((*stack_a)->index > (*stack_a)->next->index)
+		swap_a(stack_a);
+}
+
+void	sort_five(t_stack **a, t_stack **b)
+{
+	int	size;
+
+	size = stack_size(*a);
+	while (size-- > 0)
+	{
+		if ((*a)->index == 0 || (*a)->index == 1)
+			push_b(a, b);
+		else
+			rotate_a(a);
+	}
+	sort_three(a);
+	if (stack_size(*b) == 2)
+	{
+		if ((*b)->index < (*b)->next->index)
+			swap_b(b);
+	}
+	push_a(b, a);
+	push_a(b, a);
 }

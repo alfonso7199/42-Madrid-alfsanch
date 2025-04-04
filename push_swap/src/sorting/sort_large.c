@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   sort_large.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alfsanch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -9,22 +9,33 @@
 /*   Updated: 2024/07/17 17:05:05 by alfsanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "push_swap.h"
 
-int	main(int argc, char **argv)
+void	sort_large(t_stack **a, t_stack **b, int size)
 {
-	t_stack	*stack_a;
-	t_stack	*stack_b;
+	int	chunks;
+	int	chunk_size;
+	int	current_chunk;
+	int	pushed_count;
 
-	if (argc < 2)
-		return (EXIT_SUCCESS);
-	validate_input(argc, argv);
-	stack_a = create_stack(argc, argv);
-	stack_b = NULL;
-	assign_indexes(stack_a, stack_size(stack_a));
-	if (!is_sorted(stack_a))
-		sort_stack(&stack_a, &stack_b);
-	free_stack(&stack_a);
-	free_stack(&stack_b);
-	return (EXIT_SUCCESS);
+	chunks = 5;
+	if (size > 100)
+		chunks = 12;
+	chunk_size = size / chunks;
+	current_chunk = 1;
+	pushed_count = 0;
+	while (*a)
+	{
+		if ((*a)->index <= (current_chunk * chunk_size))
+		{
+			process_chunk(a, b, chunk_size, &pushed_count);
+			if (pushed_count >= current_chunk * chunk_size)
+				current_chunk++;
+		}
+		else
+			rotate_a(a);
+	}
+	while (*b)
+		find_and_push_max(a, b);
 }
