@@ -45,7 +45,7 @@ void	send_message(int pid, char *message)
 	send_bit(pid, '\0');
 }
 
-void	ack_handler(int sig)
+void	ok_bit(int sig)
 {
 	if (sig == SIGUSR1)
 		g_bit_received = 1;
@@ -63,10 +63,10 @@ int	main(int argc, char **argv)
 	pid = ft_atoi(argv[1]);
 	if (pid <= 0)
 	{
-		ft_putstr("ERROR: Invalid PID (must be greater than 0)!\n");
+		ft_printf("ERROR: Invalid PID (must be greater than 0)!\n");
 		return (EXIT_FAILURE);
 	}
-	signal(SIGUSR1, ack_handler);
+	signal(SIGUSR1, ok_bit);
 	send_message(pid, argv[2]);
 	return (EXIT_SUCCESS);
 }
