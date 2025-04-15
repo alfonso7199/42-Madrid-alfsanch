@@ -74,11 +74,11 @@ void	validate_input(int argc, char **argv)
 	{
 		num = ft_atoi(args[i]);
 		if (num < INT_MIN || num > INT_MAX || !is_valid_number(args[i]))
-			error_exit("Error");
+			error_exit("Error\n");
 		i++;
 	}
 	if (has_duplicates(args))
-		error_exit("Error");
+		error_exit("Error\n");
 	if (argc == 2)
 		free_string_array(args);
 }

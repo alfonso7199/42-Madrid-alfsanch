@@ -1,3 +1,7 @@
 */.git
 GNL/.git
 Libft/.git
+push_swap/obj
+push_swap/libft/*.o
+push_swap/libft/libft.a
+push_swap/push_swap

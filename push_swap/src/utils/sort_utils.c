@@ -55,7 +55,7 @@ void	append_node(t_stack **stack, int value)
 
 	new_node = malloc(sizeof(t_stack));
 	if (!new_node)
-		error_exit("Error con malloc");
+		error_exit("Error\n");
 	new_node->value = value;
 	new_node->index = 0;
 	new_node->next = NULL;
