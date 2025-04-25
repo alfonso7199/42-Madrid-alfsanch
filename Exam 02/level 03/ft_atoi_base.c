@@ -32,11 +32,12 @@ static int	ft_islower(char c)
 
 int	ft_atoi_base(const char *str, int str_base)
 {
-	int	sign;
-	int	result;
+	int	sign = 1;
+	int	result = 0;
+	int	value;
 
-	sign = 1;
-	result = 0;
+	if (str_base < 2 || str_base > 16 || !str)
+		return (0);
 	if (*str == '-')
 	{
 		sign = -1;
@@ -44,13 +45,19 @@ int	ft_atoi_base(const char *str, int str_base)
 	}
 	while (*str)
 	{
-		result *= str_base;
-		if (ft_isdigit(*str))
-			result += (*str - '0');
-		else if (ft_isupper(*str))
-			result += (*str - 'A' + 10);
-		else if (ft_islower(*str))
-			result += (*str - 'a' + 10);
+		if (*str >= '0' && *str <= '9')
+			value = *str - '0';
+		else if (*str >= 'A' && *str <= 'F')
+			value = *str - 'A' + 10;
+		else if (*str >= 'a' && *str <= 'f')
+			value = *str - 'a' + 10;
+		else
+			break;
+
+		if (value >= str_base)
+			break;
+
+		result = result * str_base + value;
 		str++;
 	}
 	return (result * sign);

@@ -10,26 +10,24 @@ If the number of parameters is not 2, display a newline.
 #include <stdio.h>
 #include <stdlib.h>
 
-
+unsigned int gcd(unsigned int a, unsigned int b)
+{
+    if (b == 0)
+        return a;
+    return gcd(b, a % b);
+}
 int main(int ac, char **av)
 {
-
     if (ac == 3)
     {
-        int number1 = atoi(av[1]);
-        int number2 = atoi(av[2]);
-        
-        if (number1 > 0 && number2 > 0)
+        int a = atoi(av[1]);
+        int b = atoi(av[2]);
+
+        if (a > 0 && b > 0)
         {
-            while (number1 != number2)
-            {
-                if (number1 > number2)
-                    number1 = number1 - number2;
-                else
-                    number2 = number2 - number1;
-            }
-            printf("%d", number1);
+            printf("%d", gcd(a, b));
         }
     }
     printf("\n");
+    return 0;
 }
