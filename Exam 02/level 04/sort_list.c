@@ -37,22 +37,21 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
-t_list *sort_list(t_list *lst, int (*cmp)(int, int))
+t_list	*sort_list(t_list *lst, int (*cmp)(int, int))
 {
-    t_list *i;
-    t_list *j;
+	t_list	*tmp;
 
-    i = lst;
-    while (i != NULL)
-    {
-        j = i->next;
-        while (j != NULL)
-        {
-            if (cmp(i->data, j->data) == 0)
-                ft_swap(&i->data, &j->data);
-            j = j->next;
-        }
-        i = i->next;
-    }
-    return (lst);
+	tmp = lst;
+	while (lst->next != NULL)
+	{
+		if (((*cmp)(lst->data, lst->next->data)) == 0)
+		{
+			ft_swap(&lst->data, &lst->next->data);
+			lst = tmp;
+		}
+		else
+			lst = lst->next;
+	}
+	lst = tmp;
+	return (lst);
 }
