@@ -1,0 +1,7 @@
+*/.git
+GNL/.git
+Libft/.git
+philo/obj
+philo/libft/*.o
+philo/libft/libft.a
+philo/philo
