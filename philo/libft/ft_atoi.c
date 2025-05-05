@@ -10,42 +10,63 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
+#include <limits.h>
 
-/*
-Atoi converts a char string to an integer number
-*/
+static int	ft_isnumber(const char *s)
+{
+	int	i;
+
+	i = 0;
+	if (s[i] && (s[i] == '-' || s[i] == '+'))
+		i++;
+	while (s[i])
+	{
+		if (!(s[i] >= '0' && s[i] <= '9'))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+static int	check_sign(char c)
+{
+	if (c == '-')
+		return (-1);
+	return (1);
+}
+
+static int	check_overflow(int sign)
+{
+	if (sign == 1)
+		return (-1);
+	return (0);
+}
 
 int	ft_atoi(const char *str)
 {
-	int	neg;
-	int	number;
-	int	signs;
+	int						i;
+	int						sign;
+	unsigned long long int	n;
 
-	neg = 1;
-	number = 0;
-	signs = 0;
-	while ((*str == ' ' ) || (*str >= 9 && *str <= 13))
-		++str;
-	while (*str == '-' || *str == '+')
+	i = 0;
+	n = 0;
+	if (!ft_isnumber(str))
+		return (-1);
+	sign = 1;
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+		sign = check_sign(str[i++]);
+	while (str[i] >= '0' && str[i] <= '9')
 	{
-		if (*str == '-')
-			neg *= -1;
-		++str;
-		signs++;
-		if (signs > 1)
-			return (0);
+		if (n >= LONG_MAX)
+		{
+			n = check_overflow(sign);
+			break ;
+		}
+		n = n * 10 + (str[i++] - '0');
 	}
-	while ((*str != 0) && (*str >= '0') && (*str <= '9'))
-	{
-		number = (number * 10) + (*str - '0');
-		++str;
-	}
-	return (number * neg);
+	if (sign < 0)
+		return (0);
+	return (sign * (int)n);
 }
-
-/*int main(void)
-{
-    const char *str1 = "   -123";
-    printf("Conversion de '%s': %d\n", str1, ft_atoi(str1));
-    return 0;
-}*/
