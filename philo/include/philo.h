@@ -25,7 +25,6 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <stdbool.h>
-# include "../libft/libft.h"
 
 # define STDERR_FILENO 2
 
@@ -73,5 +72,6 @@ void    set_simulation_stop(t_data *data, int value);
 int     all_philos_full(t_data *data);
 void    clean_resources(t_data *data);
 int     clean_exit(t_data *data, int exit_code);
+int     ft_atoi(const char *str);
 
 #endif

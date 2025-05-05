@@ -9,7 +9,7 @@
 /*   Updated: 2024/07/17 17:05:05 by alfsanch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "libft.h"
+#include "philo.h"
 #include <limits.h>
 
 static int	ft_isnumber(const char *s)
