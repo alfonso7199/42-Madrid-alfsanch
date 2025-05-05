@@ -70,7 +70,6 @@ void leave_forks(t_philo *philo)
 {
     pthread_mutex_unlock(philo->left_fork);
     pthread_mutex_unlock(philo->right_fork);
-    safe_print(philo, "is sleeping");
 }
 
 void sleep_philo(t_philo *philo)
