@@ -1,6 +1,6 @@
 NAME		= philo
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -pthread -fsanitize=thread -g
 INCLUDE_DIR = ./include
 
 SRC_DIR		= ./src

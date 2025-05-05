@@ -11,28 +11,26 @@
 /* ************************************************************************** */
 #include "philo.h"
 
-int check_philo_death(t_data *data, int i)
-{
-    long long current_time;
-    long long time_since_last_meal;
-
+int check_philo_death(t_data *data, int i) {
+    long long current_time, last_meal, time_since_meal;
+    
     pthread_mutex_lock(&data->meal_mutex);
     current_time = get_current_time();
-    time_since_last_meal = current_time - data->philos[i].last_meal_time;
+    last_meal = data->philos[i].last_meal_time;
+    time_since_meal = current_time - last_meal;
+    pthread_mutex_unlock(&data->meal_mutex);
     
-    if (time_since_last_meal > data->time_to_die && !data->stop_simulation)
-    {
+    if (time_since_meal > data->time_to_die) {
         pthread_mutex_lock(&data->print_mutex);
-        printf("%lld %d died\n", current_time - data->start_time, data->philos[i].id);
-        data->stop_simulation = 1;
+        if (!data->stop_simulation) {
+            printf("%lld %d died\n", current_time - data->start_time, data->philos[i].id);
+            data->stop_simulation = 1;
+        }
         pthread_mutex_unlock(&data->print_mutex);
-        pthread_mutex_unlock(&data->meal_mutex);
         return (1);
     }
-    pthread_mutex_unlock(&data->meal_mutex);
     return (0);
 }
-
 void *monitor_routine(void *arg)
 {
     t_data *data = (t_data *)arg;
@@ -65,7 +63,7 @@ void *monitor_routine(void *arg)
             return (NULL);
         }
         
-        usleep(1000);
+        usleep(500);
     }
     return (NULL);
 }

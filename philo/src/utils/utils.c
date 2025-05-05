@@ -28,13 +28,12 @@ int	error_exit(const char *msg)
 	return (FAILURE);
 }
 
-void safe_print(t_philo *philo, char *msg)
-{
+void safe_print(t_philo *philo, char *msg) {
     pthread_mutex_lock(&philo->data->print_mutex);
-    if (!simulation_should_stop(philo->data))
-        printf("%lld %d %s\n", 
-            get_current_time() - philo->data->start_time, 
-            philo->id, msg);
+    if (!philo->data->stop_simulation)
+    {
+        printf("%lld %d %s\n", get_current_time() - philo->data->start_time, philo->id, msg);
+    }
     pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
