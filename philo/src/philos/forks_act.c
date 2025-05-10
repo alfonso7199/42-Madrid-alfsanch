@@ -25,30 +25,30 @@ void	take_forks(t_philo *philo)
 		pthread_mutex_unlock(philo->left_fork);
 		return ;
 	}
-	if (philo->id % 2 == 0)
-	{
-		pthread_mutex_lock(philo->left_fork);
-		safe_print(philo, "has taken a fork");
-		pthread_mutex_lock(philo->right_fork);
-		safe_print(philo, "has taken a fork");
+	pthread_mutex_t *first = philo->left_fork;
+	pthread_mutex_t *second = philo->right_fork;
+	if (philo->left_fork > philo->right_fork) {
+		first = philo->right_fork;
+		second = philo->left_fork;
 	}
-	else
-	{
-		pthread_mutex_lock(philo->right_fork);
-		safe_print(philo, "has taken a fork");
-		pthread_mutex_lock(philo->left_fork);
-		safe_print(philo, "has taken a fork");
-	}
+	pthread_mutex_lock(first);
+	safe_print(philo, "has taken a fork");
+	pthread_mutex_lock(second);
+	safe_print(philo, "has taken a fork");
 }
 
-void	eat(t_philo *philo)
+void eat(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data->meal_mutex);
-	philo->last_meal_time = get_current_time();
-	philo->meals_eaten++;
-	pthread_mutex_unlock(&philo->data->meal_mutex);
-	safe_print(philo, "is eating");
-	precise_usleep(philo->data->time_to_eat, philo->data);
+    if (simulation_should_stop(philo->data))
+        return;
+    pthread_mutex_lock(&philo->data->meal_mutex);
+    philo->last_meal_time = get_current_time();
+    pthread_mutex_unlock(&philo->data->meal_mutex);
+    safe_print(philo, "is eating");
+    precise_usleep(philo->data->time_to_eat, philo->data);
+    pthread_mutex_lock(&philo->data->meal_mutex);
+    philo->meals_eaten++;
+    pthread_mutex_unlock(&philo->data->meal_mutex);
 }
 
 void	leave_forks(t_philo *philo)

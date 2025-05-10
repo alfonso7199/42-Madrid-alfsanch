@@ -18,7 +18,7 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
-		precise_usleep(philo->data->time_to_eat / 2, philo->data);
+		precise_usleep(1, philo->data);
 	while (!simulation_should_stop(philo->data))
 	{
 		take_forks(philo);

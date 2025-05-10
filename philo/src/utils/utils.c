@@ -51,5 +51,5 @@ void	precise_usleep(long ms, t_data *data)
 
 	start = get_current_time();
 	while (get_current_time() - start < ms && !simulation_should_stop(data))
-		usleep(500);
+		usleep(100);
 }
