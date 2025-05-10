@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alfsanch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,24 +11,42 @@
 /* ************************************************************************** */
 #include "philo.h"
 
-int	main(int argc, char **argv)
+int	clean_exit(t_data *data, int exit_code)
 {
-	t_data	data;
-	int		i;
+	int	i;
 
-	if (!validate_input(argc, argv, &data))
-		return (1);
-	if (init_data(&data) != 0)
-		return (1);
-	if (init_threads(&data) != 0)
-		return (clean_exit(&data, 1));
-	i = 0;
-	while (i < data.num_philos)
+	if (data)
 	{
-		pthread_join(data.philos[i].thread, NULL);
+		if (data->philos)
+		{
+			i = 0;
+			while (i < data->num_philos)
+			{
+				if (data->philos[i].thread)
+					pthread_join(data->philos[i].thread, NULL);
+				i++;
+			}
+		}
+		clean_resources(data);
+	}
+	return (exit_code);
+}
+
+void	clean_resources(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->num_philos)
+	{
+		pthread_mutex_destroy(&data->forks[i]);
 		i++;
 	}
-	pthread_join(data.monitor, NULL);
-	clean_resources(&data);
-	return (0);
+	pthread_mutex_destroy(&data->print_mutex);
+	pthread_mutex_destroy(&data->meal_mutex);
+	pthread_mutex_destroy(&data->stop_mutex);
+	if (data->forks)
+		free(data->forks);
+	if (data->philos)
+		free(data->philos);
 }

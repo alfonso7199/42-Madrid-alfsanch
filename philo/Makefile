@@ -16,8 +16,10 @@ SRC_FILES	= \
 	$(VAL_DIR)/input_validation.c \
 	$(PHILOS_DIR)/monitor_philos.c \
 	$(PHILOS_DIR)/philos_act.c \
+	$(PHILOS_DIR)/forks_act.c \
 	$(UTILS_DIR)/utils.c \
 	$(UTILS_DIR)/ft_atoi.c \
+	$(UTILS_DIR)/clean.c \
 	$(INIT_DIR)/init.c \
 
 

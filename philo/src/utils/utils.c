@@ -28,38 +28,28 @@ int	error_exit(const char *msg)
 	return (FAILURE);
 }
 
-void safe_print(t_philo *philo, char *msg) {
-    pthread_mutex_lock(&philo->data->print_mutex);
-    if (!philo->data->stop_simulation)
-    {
-        printf("%lld %d %s\n", get_current_time() - philo->data->start_time, philo->id, msg);
-    }
-    pthread_mutex_unlock(&philo->data->print_mutex);
+void	safe_print(t_philo *philo, char *msg)
+{
+	long long	time;
+
+	pthread_mutex_lock(&philo->data->stop_mutex);
+	if (philo->data->stop_simulation)
+	{
+		pthread_mutex_unlock(&philo->data->stop_mutex);
+		return ;
+	}
+	pthread_mutex_unlock(&philo->data->stop_mutex);
+	pthread_mutex_lock(&philo->data->print_mutex);
+	time = get_current_time() - philo->data->start_time;
+	printf("%lld %d %s\n", time, philo->id, msg);
+	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
-void precise_usleep(long ms, t_data *data)
+void	precise_usleep(long ms, t_data *data)
 {
-    long start;
-    
-    start = get_current_time();
-    while (get_current_time() - start < ms && !simulation_should_stop(data))
-        usleep(500);
-}
+	long	start;
 
-void clean_resources(t_data *data)
-{
-    int i;
-    
-    i = 0;
-    while (i < data->num_philos)
-    {
-        pthread_mutex_destroy(&data->forks[i]);
-        i++;
-    }
-    pthread_mutex_destroy(&data->print_mutex);
-    pthread_mutex_destroy(&data->meal_mutex);
-    if (data->forks)
-        free(data->forks);
-    if (data->philos)
-        free(data->philos);
+	start = get_current_time();
+	while (get_current_time() - start < ms && !simulation_should_stop(data))
+		usleep(500);
 }
