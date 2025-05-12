@@ -12,6 +12,30 @@
 
 #include "philo.h"
 
+static void	handle_single_philo(t_philo *philo)
+{
+	pthread_mutex_lock(philo->left_fork);
+	safe_print(philo, "has taken a fork");
+	while (!simulation_should_stop(philo->data))
+		usleep(100);
+	pthread_mutex_unlock(philo->left_fork);
+}
+
+static void	select_forks(t_philo *philo, pthread_mutex_t **first,
+						pthread_mutex_t **second)
+{
+	if (philo->id % 2 == 0)
+	{
+		*first = philo->left_fork;
+		*second = philo->right_fork;
+	}
+	else
+	{
+		*first = philo->right_fork;
+		*second = philo->left_fork;
+	}
+}
+
 void	take_forks(t_philo *philo)
 {
 	pthread_mutex_t	*first;
@@ -20,21 +44,8 @@ void	take_forks(t_philo *philo)
 	if (simulation_should_stop(philo->data))
 		return ;
 	if (philo->data->num_philos == 1)
-	{
-		pthread_mutex_lock(philo->left_fork);
-		safe_print(philo, "has taken a fork");
-		while (!simulation_should_stop(philo->data))
-			usleep(100);
-		pthread_mutex_unlock(philo->left_fork);
-		return ;
-	}
-	*first = philo->left_fork;
-	*second = philo->right_fork;
-	if (philo->left_fork > philo->right_fork)
-	{
-		first = philo->right_fork;
-		second = philo->left_fork;
-	}
+		return (handle_single_philo(philo));
+	select_forks(philo, &first, &second);
 	pthread_mutex_lock(first);
 	safe_print(philo, "has taken a fork");
 	pthread_mutex_lock(second);
@@ -47,12 +58,10 @@ void	eat(t_philo *philo)
 		return ;
 	pthread_mutex_lock(&philo->data->meal_mutex);
 	philo->last_meal_time = get_current_time();
+	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->data->meal_mutex);
 	safe_print(philo, "is eating");
 	precise_usleep(philo->data->time_to_eat, philo->data);
-	pthread_mutex_lock(&philo->data->meal_mutex);
-	philo->meals_eaten++;
-	pthread_mutex_unlock(&philo->data->meal_mutex);
 }
 
 void	leave_forks(t_philo *philo)

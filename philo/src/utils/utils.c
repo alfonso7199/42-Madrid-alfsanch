@@ -32,16 +32,15 @@ void	safe_print(t_philo *philo, char *msg)
 {
 	long long	time;
 
-	pthread_mutex_lock(&philo->data->stop_mutex);
-	if (philo->data->stop_simulation)
-	{
-		pthread_mutex_unlock(&philo->data->stop_mutex);
-		return ;
-	}
-	pthread_mutex_unlock(&philo->data->stop_mutex);
 	pthread_mutex_lock(&philo->data->print_mutex);
-	time = get_current_time() - philo->data->start_time;
-	printf(GREEN"[%lld]"RESET" %d %s\n", time, philo->id, msg);
+	if (!simulation_should_stop(philo->data))
+	{
+		time = get_current_time() - philo->data->start_time;
+		if (ft_strcmp(msg, "died") == 0)
+			printf(RED"[%lld]"RESET" %d %s\n", time, philo->id, msg);
+		else
+			printf(GREEN"[%lld]"RESET" %d %s\n", time, philo->id, msg);
+	}
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 

@@ -29,7 +29,7 @@ int	check_philo_death(t_data *data, int i)
 		if (!data->stop_simulation)
 		{
 			printf(RED"[%lld]"RESET" %d died\n",
-				current_time - data->start_time, data->philos[i].id);
+				get_current_time() - data->start_time, data->philos[i].id);
 			pthread_mutex_lock(&data->stop_mutex);
 			data->stop_simulation = 1;
 			pthread_mutex_unlock(&data->stop_mutex);
@@ -81,7 +81,7 @@ void	*monitor_routine(void *arg)
 			pthread_mutex_unlock(&data->stop_mutex);
 			return (NULL);
 		}
-		precise_usleep(500, data);
+		precise_usleep(1, data);
 	}
 	return (NULL);
 }

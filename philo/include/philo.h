@@ -75,9 +75,9 @@ void		safe_print(t_philo *philo, char *msg);
 void		precise_usleep(long ms, t_data *data);
 int			simulation_should_stop(t_data *data);
 void		set_simulation_stop(t_data *data, int value);
-//int			all_philos_full(t_data *data);
 void		clean_resources(t_data *data);
 int			clean_exit(t_data *data, int exit_code);
 int			ft_atoi(const char *str);
+int			ft_strcmp(char *s1, char *s2);
 
 #endif
