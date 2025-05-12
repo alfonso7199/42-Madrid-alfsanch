@@ -28,7 +28,7 @@ int	check_philo_death(t_data *data, int i)
 		pthread_mutex_lock(&data->print_mutex);
 		if (!data->stop_simulation)
 		{
-			printf("%lld %d died\n",
+			printf(RED"[%lld]"RESET" %d died\n",
 				current_time - data->start_time, data->philos[i].id);
 			pthread_mutex_lock(&data->stop_mutex);
 			data->stop_simulation = 1;

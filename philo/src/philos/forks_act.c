@@ -58,3 +58,43 @@ void	leave_forks(t_philo *philo)
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }
+
+/*
+alfon@ESPTPB251:~/42-Madrid-alfsanch/philo$ ./philo 5 600 200 200 
+1 1 has taken a fork
+1 1 has taken a fork
+1 1 is eating
+1 3 has taken a fork
+1 3 has taken a fork
+1 3 is eating
+201 3 is sleeping
+201 2 has taken a fork
+201 2 has taken a fork
+201 2 is eating
+201 1 is sleeping
+201 4 has taken a fork
+201 4 has taken a fork
+201 4 is eating
+201 5 has taken a fork
+401 1 is thinking
+401 4 is sleeping
+401 5 has taken a fork
+401 5 is eating
+401 2 is sleeping
+401 3 is thinking
+401 3 has taken a fork
+401 3 has taken a fork
+401 3 is eating
+601 4 is thinking
+601 2 is thinking
+601 2 has taken a fork
+601 5 is sleeping
+601 2 has taken a fork
+601 2 is eating
+601 3 is sleeping
+601 4 has taken a fork
+601 4 has taken a fork
+601 4 is eating
+601 1 has taken a fork
+602 1 died
+*/

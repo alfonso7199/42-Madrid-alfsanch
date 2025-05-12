@@ -27,6 +27,10 @@
 # include <stdbool.h>
 
 # define STDERR_FILENO 2
+# define GREEN    "\033[32m"
+# define RESET    "\033[0m"
+# define RED      "\033[31m"
+
 
 typedef struct s_philo
 {

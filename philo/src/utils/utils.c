@@ -41,7 +41,7 @@ void	safe_print(t_philo *philo, char *msg)
 	pthread_mutex_unlock(&philo->data->stop_mutex);
 	pthread_mutex_lock(&philo->data->print_mutex);
 	time = get_current_time() - philo->data->start_time;
-	printf("%lld %d %s\n", time, philo->id, msg);
+	printf(GREEN"[%lld]"RESET" %d %s\n", time, philo->id, msg);
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
