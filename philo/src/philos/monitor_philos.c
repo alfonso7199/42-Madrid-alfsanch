@@ -45,15 +45,18 @@ static int	check_all_philos_full(t_data *data)
 	int	i;
 	int	all_full;
 
+	if (data->num_meals == -1)
+		return (0);
 	i = 0;
 	all_full = 1;
 	while (i < data->num_philos)
 	{
 		pthread_mutex_lock(&data->meal_mutex);
-		if (data->num_meals != -1
-			&& data->philos[i].meals_eaten < data->num_meals)
+		if (data->philos[i].meals_eaten < data->num_meals)
 			all_full = 0;
 		pthread_mutex_unlock(&data->meal_mutex);
+		if (!all_full)
+			break ;
 		i++;
 	}
 	return (all_full);
@@ -65,7 +68,7 @@ void	*monitor_routine(void *arg)
 	int		i;
 
 	data = (t_data *)arg;
-	while (1)
+	while (!simulation_should_stop(data))
 	{
 		i = 0;
 		while (i < data->num_philos)
@@ -74,14 +77,14 @@ void	*monitor_routine(void *arg)
 				return (NULL);
 			i++;
 		}
-		if (data->num_meals != -1 && check_all_philos_full(data))
+		if (check_all_philos_full(data))
 		{
 			pthread_mutex_lock(&data->stop_mutex);
 			data->stop_simulation = 1;
 			pthread_mutex_unlock(&data->stop_mutex);
 			return (NULL);
 		}
-		precise_usleep(1, data);
+		usleep(1000 * (data->num_philos / 200 + 1));
 	}
 	return (NULL);
 }

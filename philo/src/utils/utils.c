@@ -46,9 +46,20 @@ void	safe_print(t_philo *philo, char *msg)
 
 void	precise_usleep(long ms, t_data *data)
 {
-	long	start;
+	long		start;
+	long		elapsed;
+	long		remaining;
 
 	start = get_current_time();
-	while (get_current_time() - start < ms && !simulation_should_stop(data))
-		usleep(100);
+	while (!simulation_should_stop(data))
+	{
+		elapsed = get_current_time() - start;
+		remaining = ms - elapsed;
+		if (remaining <= 0)
+			break ;
+		if (remaining > 100)
+			usleep(remaining * 500);
+		else
+			usleep(100);
+	}
 }

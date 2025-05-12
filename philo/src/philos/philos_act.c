@@ -18,14 +18,20 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
-		precise_usleep(philo->data->time_to_eat / 2, philo->data);
+		precise_usleep(philo->data->time_to_eat / 10, philo->data);
 	while (!simulation_should_stop(philo->data))
 	{
 		take_forks(philo);
 		eat(philo);
 		leave_forks(philo);
+		if (simulation_should_stop(philo->data))
+			break ;
 		sleep_philo(philo);
+		if (simulation_should_stop(philo->data))
+			break ;
 		think(philo);
+		if (philo->data->num_philos > 100)
+			precise_usleep(100, philo->data);
 	}
 	return (NULL);
 }
