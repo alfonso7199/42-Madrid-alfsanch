@@ -31,7 +31,6 @@
 # define RESET    "\033[0m"
 # define RED      "\033[31m"
 
-
 typedef struct s_philo
 {
 	int				id;

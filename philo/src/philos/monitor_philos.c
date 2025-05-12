@@ -81,7 +81,7 @@ void	*monitor_routine(void *arg)
 			pthread_mutex_unlock(&data->stop_mutex);
 			return (NULL);
 		}
-		usleep(500);
+		precise_usleep(500, data);
 	}
 	return (NULL);
 }

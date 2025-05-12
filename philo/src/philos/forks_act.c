@@ -14,6 +14,9 @@
 
 void	take_forks(t_philo *philo)
 {
+	pthread_mutex_t	*first;
+	pthread_mutex_t	*second;
+
 	if (simulation_should_stop(philo->data))
 		return ;
 	if (philo->data->num_philos == 1)
@@ -25,9 +28,10 @@ void	take_forks(t_philo *philo)
 		pthread_mutex_unlock(philo->left_fork);
 		return ;
 	}
-	pthread_mutex_t *first = philo->left_fork;
-	pthread_mutex_t *second = philo->right_fork;
-	if (philo->left_fork > philo->right_fork) {
+	*first = philo->left_fork;
+	*second = philo->right_fork;
+	if (philo->left_fork > philo->right_fork)
+	{
 		first = philo->right_fork;
 		second = philo->left_fork;
 	}
@@ -37,18 +41,18 @@ void	take_forks(t_philo *philo)
 	safe_print(philo, "has taken a fork");
 }
 
-void eat(t_philo *philo)
+void	eat(t_philo *philo)
 {
-    if (simulation_should_stop(philo->data))
-        return;
-    pthread_mutex_lock(&philo->data->meal_mutex);
-    philo->last_meal_time = get_current_time();
-    pthread_mutex_unlock(&philo->data->meal_mutex);
-    safe_print(philo, "is eating");
-    precise_usleep(philo->data->time_to_eat, philo->data);
-    pthread_mutex_lock(&philo->data->meal_mutex);
-    philo->meals_eaten++;
-    pthread_mutex_unlock(&philo->data->meal_mutex);
+	if (simulation_should_stop(philo->data))
+		return ;
+	pthread_mutex_lock(&philo->data->meal_mutex);
+	philo->last_meal_time = get_current_time();
+	pthread_mutex_unlock(&philo->data->meal_mutex);
+	safe_print(philo, "is eating");
+	precise_usleep(philo->data->time_to_eat, philo->data);
+	pthread_mutex_lock(&philo->data->meal_mutex);
+	philo->meals_eaten++;
+	pthread_mutex_unlock(&philo->data->meal_mutex);
 }
 
 void	leave_forks(t_philo *philo)
@@ -58,43 +62,3 @@ void	leave_forks(t_philo *philo)
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }
-
-/*
-alfon@ESPTPB251:~/42-Madrid-alfsanch/philo$ ./philo 5 600 200 200 
-1 1 has taken a fork
-1 1 has taken a fork
-1 1 is eating
-1 3 has taken a fork
-1 3 has taken a fork
-1 3 is eating
-201 3 is sleeping
-201 2 has taken a fork
-201 2 has taken a fork
-201 2 is eating
-201 1 is sleeping
-201 4 has taken a fork
-201 4 has taken a fork
-201 4 is eating
-201 5 has taken a fork
-401 1 is thinking
-401 4 is sleeping
-401 5 has taken a fork
-401 5 is eating
-401 2 is sleeping
-401 3 is thinking
-401 3 has taken a fork
-401 3 has taken a fork
-401 3 is eating
-601 4 is thinking
-601 2 is thinking
-601 2 has taken a fork
-601 5 is sleeping
-601 2 has taken a fork
-601 2 is eating
-601 3 is sleeping
-601 4 has taken a fork
-601 4 has taken a fork
-601 4 is eating
-601 1 has taken a fork
-602 1 died
-*/
