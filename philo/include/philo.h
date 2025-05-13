@@ -61,7 +61,7 @@ typedef struct s_data
 
 bool		validate_input(int argc, char **argv, t_data *data);
 int			init_data(t_data *data);
-long		get_current_time(void);
+long long	get_current_time(void);
 int			error_exit(const char *msg);
 void		*philo_routine(void *arg);
 void		*monitor_routine(void *arg);
@@ -72,7 +72,7 @@ void		leave_forks(t_philo *philo);
 void		sleep_philo(t_philo *philo);
 void		think(t_philo *philo);
 void		safe_print(t_philo *philo, char *msg);
-void		precise_usleep(long ms, t_data *data);
+void		precise_usleep(long ms);
 int			simulation_should_stop(t_data *data);
 void		set_simulation_stop(t_data *data, int value);
 void		clean_resources(t_data *data);

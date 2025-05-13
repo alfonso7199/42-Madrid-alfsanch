@@ -13,12 +13,11 @@
 #include <sys/time.h>
 #include <stdio.h>
 
-long	get_current_time(void)
+long long	get_current_time(void)
 {
 	struct timeval	tv;
 
-	if (gettimeofday(&tv, NULL) != 0)
-		return (-1);
+	gettimeofday(&tv, NULL);
 	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
@@ -44,22 +43,11 @@ void	safe_print(t_philo *philo, char *msg)
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
-void	precise_usleep(long ms, t_data *data)
+void	precise_usleep(long ms)
 {
-	long		start;
-	long		elapsed;
-	long		remaining;
+	long int	start;
 
 	start = get_current_time();
-	while (!simulation_should_stop(data))
-	{
-		elapsed = get_current_time() - start;
-		remaining = ms - elapsed;
-		if (remaining <= 0)
-			break ;
-		if (remaining > 100)
-			usleep(remaining * 500);
-		else
-			usleep(100);
-	}
+	while (get_current_time() - start < ms)
+		usleep(ms / 10);
 }

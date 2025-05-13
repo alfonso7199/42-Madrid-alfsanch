@@ -49,7 +49,7 @@ void	take_forks(t_philo *philo)
 	pthread_mutex_lock(first);
 	safe_print(philo, "has taken a fork");
 	if (philo->data->num_philos > 100)
-		precise_usleep(50, philo->data);
+		precise_usleep(50);
 	pthread_mutex_lock(second);
 	safe_print(philo, "has taken a fork");
 }
@@ -63,7 +63,7 @@ void	eat(t_philo *philo)
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->data->meal_mutex);
 	safe_print(philo, "is eating");
-	precise_usleep(philo->data->time_to_eat, philo->data);
+	precise_usleep(philo->data->time_to_eat);
 }
 
 void	leave_forks(t_philo *philo)

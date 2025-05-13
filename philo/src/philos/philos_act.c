@@ -18,7 +18,7 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
-		precise_usleep(philo->data->time_to_eat / 10, philo->data);
+		precise_usleep(philo->data->time_to_eat / 10);
 	while (!simulation_should_stop(philo->data))
 	{
 		take_forks(philo);
@@ -31,7 +31,7 @@ void	*philo_routine(void *arg)
 			break ;
 		think(philo);
 		if (philo->data->num_philos > 100)
-			precise_usleep(100, philo->data);
+			precise_usleep(100);
 	}
 	return (NULL);
 }
@@ -39,7 +39,7 @@ void	*philo_routine(void *arg)
 void	sleep_philo(t_philo *philo)
 {
 	safe_print(philo, "is sleeping");
-	precise_usleep(philo->data->time_to_sleep, philo->data);
+	precise_usleep(philo->data->time_to_sleep);
 }
 
 void	think(t_philo *philo)
