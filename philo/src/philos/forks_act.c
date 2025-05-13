@@ -48,8 +48,6 @@ void	take_forks(t_philo *philo)
 	select_forks(philo, &first, &second);
 	pthread_mutex_lock(first);
 	safe_print(philo, "has taken a fork");
-	if (philo->data->num_philos > 100)
-		precise_usleep(50);
 	pthread_mutex_lock(second);
 	safe_print(philo, "has taken a fork");
 }

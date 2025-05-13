@@ -30,8 +30,6 @@ void	*philo_routine(void *arg)
 		if (simulation_should_stop(philo->data))
 			break ;
 		think(philo);
-		if (philo->data->num_philos > 100)
-			precise_usleep(100);
 	}
 	return (NULL);
 }
