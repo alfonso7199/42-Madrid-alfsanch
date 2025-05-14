@@ -66,18 +66,19 @@ int			error_exit(const char *msg);
 void		*philo_routine(void *arg);
 void		*monitor_routine(void *arg);
 int			init_threads(t_data *data);
-void		take_forks(t_philo *philo);
+int			take_forks(t_philo *philo);
 void		eat(t_philo *philo);
 void		leave_forks(t_philo *philo);
 void		sleep_philo(t_philo *philo);
 void		think(t_philo *philo);
 void		safe_print(t_philo *philo, char *msg);
-void		precise_usleep(long ms);
 int			simulation_should_stop(t_data *data);
 void		set_simulation_stop(t_data *data, int value);
+void		handle_single_philo(t_philo *philo);
 void		clean_resources(t_data *data);
 int			clean_exit(t_data *data, int exit_code);
 int			ft_atoi(const char *str);
 int			ft_strcmp(char *s1, char *s2);
+void		precise_usleep(long ms);
 
 #endif

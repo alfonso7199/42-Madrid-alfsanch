@@ -12,15 +12,6 @@
 
 #include "philo.h"
 
-static void	handle_single_philo(t_philo *philo)
-{
-	pthread_mutex_lock(philo->left_fork);
-	safe_print(philo, "has taken a fork");
-	while (!simulation_should_stop(philo->data))
-		usleep(100);
-	pthread_mutex_unlock(philo->left_fork);
-}
-
 static void	select_forks(t_philo *philo, pthread_mutex_t **first,
 						pthread_mutex_t **second)
 {
@@ -36,32 +27,47 @@ static void	select_forks(t_philo *philo, pthread_mutex_t **first,
 	}
 }
 
-void	take_forks(t_philo *philo)
+static int	take_first_fork(t_philo *philo, pthread_mutex_t *first)
+{
+	pthread_mutex_lock(first);
+	safe_print(philo, "has taken a fork");
+	if (simulation_should_stop(philo->data))
+	{
+		pthread_mutex_unlock(first);
+		return (0);
+	}
+	return (1);
+}
+
+static int	take_second_fork(t_philo *philo, pthread_mutex_t *first,
+							pthread_mutex_t *second)
+{
+	pthread_mutex_lock(second);
+	safe_print(philo, "has taken a fork");
+	if (simulation_should_stop(philo->data))
+	{
+		pthread_mutex_unlock(second);
+		pthread_mutex_unlock(first);
+		return (0);
+	}
+	return (1);
+}
+
+int	take_forks(t_philo *philo)
 {
 	pthread_mutex_t	*first;
 	pthread_mutex_t	*second;
 
 	if (simulation_should_stop(philo->data))
-		return ;
+		return (0);
 	if (philo->data->num_philos == 1)
-		return (handle_single_philo(philo));
+		return (handle_single_philo(philo), 0);
 	select_forks(philo, &first, &second);
-	pthread_mutex_lock(first);
-	safe_print(philo, "has taken a fork");
-	pthread_mutex_lock(second);
-	safe_print(philo, "has taken a fork");
-}
-
-void	eat(t_philo *philo)
-{
-	if (simulation_should_stop(philo->data))
-		return ;
-	pthread_mutex_lock(&philo->data->meal_mutex);
-	philo->last_meal_time = get_current_time();
-	philo->meals_eaten++;
-	pthread_mutex_unlock(&philo->data->meal_mutex);
-	safe_print(philo, "is eating");
-	precise_usleep(philo->data->time_to_eat);
+	if (!take_first_fork(philo, first))
+		return (0);
+	if (!take_second_fork(philo, first, second))
+		return (0);
+	return (1);
 }
 
 void	leave_forks(t_philo *philo)

@@ -84,7 +84,7 @@ void	*monitor_routine(void *arg)
 			pthread_mutex_unlock(&data->stop_mutex);
 			return (NULL);
 		}
-		usleep(1000 * (data->num_philos / 200 + 1));
+		usleep(1000);
 	}
 	return (NULL);
 }

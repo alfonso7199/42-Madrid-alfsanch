@@ -45,9 +45,16 @@ void	safe_print(t_philo *philo, char *msg)
 
 void	precise_usleep(long ms)
 {
-	long int	start;
+    long int	start = get_current_time();
+    while (get_current_time() - start < ms)
+        usleep(500);
+}
 
-	start = get_current_time();
-	while (get_current_time() - start < ms)
-		usleep(ms / 10);
+void	handle_single_philo(t_philo *philo)
+{
+	pthread_mutex_lock(philo->left_fork);
+	safe_print(philo, "has taken a fork");
+	while (!simulation_should_stop(philo->data))
+		usleep(100);
+	pthread_mutex_unlock(philo->left_fork);
 }
