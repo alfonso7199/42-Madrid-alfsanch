@@ -45,9 +45,11 @@ void	safe_print(t_philo *philo, char *msg)
 
 void	precise_usleep(long ms)
 {
-    long int	start = get_current_time();
-    while (get_current_time() - start < ms)
-        usleep(500);
+	long int	start;
+
+	start = get_current_time();
+	while (get_current_time() - start < ms)
+		usleep(500);
 }
 
 void	handle_single_philo(t_philo *philo)

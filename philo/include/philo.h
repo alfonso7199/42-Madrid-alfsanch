@@ -63,6 +63,7 @@ bool		validate_input(int argc, char **argv, t_data *data);
 int			init_data(t_data *data);
 long long	get_current_time(void);
 int			error_exit(const char *msg);
+int			error_msg(char *msg);
 void		*philo_routine(void *arg);
 void		*monitor_routine(void *arg);
 int			init_threads(t_data *data);
