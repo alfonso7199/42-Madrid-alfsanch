@@ -62,6 +62,7 @@ void	eat(t_philo *philo)
 		return ;
 	safe_print(philo, "is eating");
 	pthread_mutex_lock(&philo->data->meal_mutex);
+	philo->last_meal_time = get_current_time();
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->data->meal_mutex);
 	precise_usleep(philo->data->time_to_eat);
