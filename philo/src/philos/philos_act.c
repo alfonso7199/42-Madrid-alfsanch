@@ -18,7 +18,7 @@ void	*philo_routine(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
-		usleep(philo->data->time_to_eat * 500);
+		usleep(1000);
 	while (!simulation_should_stop(philo->data))
 	{
 		if (!take_forks(philo))
@@ -43,18 +43,27 @@ void	sleep_philo(t_philo *philo)
 
 void	think(t_philo *philo)
 {
+	long long	think_time;
+
 	safe_print(philo, "is thinking");
+	if (philo->data->num_philos % 2 != 0)
+	{
+		think_time = (philo->data->time_to_eat * 2) - 10;
+		if (think_time < 0)
+			think_time = 0;
+		if (think_time > 0)
+			usleep(think_time * 100);
+	}
 }
 
 void	eat(t_philo *philo)
 {
 	if (simulation_should_stop(philo->data))
 		return ;
+	safe_print(philo, "is eating");
 	pthread_mutex_lock(&philo->data->meal_mutex);
-	philo->last_meal_time = get_current_time();
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->data->meal_mutex);
-	safe_print(philo, "is eating");
 	precise_usleep(philo->data->time_to_eat);
 }
 

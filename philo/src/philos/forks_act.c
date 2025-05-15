@@ -67,6 +67,9 @@ int	take_forks(t_philo *philo)
 		return (0);
 	if (!take_second_fork(philo, first, second))
 		return (0);
+	pthread_mutex_lock(&philo->data->meal_mutex);
+	philo->last_meal_time = get_current_time();
+	pthread_mutex_unlock(&philo->data->meal_mutex);
 	return (1);
 }
 
