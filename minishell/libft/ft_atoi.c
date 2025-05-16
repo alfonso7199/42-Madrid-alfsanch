@@ -17,30 +17,29 @@ Atoi converts a char string to an integer number
 
 int	ft_atoi(const char *str)
 {
-	int	neg;
-	int	number;
-	int	signs;
+	long	result;
+	int		sign;
 
-	neg = 1;
-	number = 0;
-	signs = 0;
-	while ((*str == ' ' ) || (*str >= 9 && *str <= 13))
-		++str;
-	while (*str == '-' || *str == '+')
+	result = 0;
+	sign = 1;
+	while (*str == ' ' || (*str >= '\t' && *str <= '\r'))
+		str++;
+	if (*str == '-' || *str == '+')
 	{
 		if (*str == '-')
-			neg *= -1;
-		++str;
-		signs++;
-		if (signs > 1)
-			return (0);
+			return (-1);
+		str++;
 	}
-	while ((*str != 0) && (*str >= '0') && (*str <= '9'))
+	while (*str >= '0' && *str <= '9')
 	{
-		number = (number * 10) + (*str - '0');
-		++str;
+		result = result * 10 + (*str - '0');
+		if (result > INT_MAX)
+			return (-1);
+		str++;
 	}
-	return (number * neg);
+	if (*str != '\0')
+		return (-1);
+	return ((int)(result * sign));
 }
 
 /*int main(void)
