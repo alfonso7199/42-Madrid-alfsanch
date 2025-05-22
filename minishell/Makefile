@@ -10,6 +10,8 @@ SRC_DIR		= ./src
 
 OBJ_DIR		= obj
 
+LDFLAGS = -lreadline
+
 SRC_FILES	= \
     $(SRC_DIR)/minishell.c \
 
