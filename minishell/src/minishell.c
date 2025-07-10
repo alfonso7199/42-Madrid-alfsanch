@@ -1,61 +1,98 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rzt <rzt@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/15 10:00:00 by alfsanch          #+#    #+#             */
+/*   Updated: 2025/06/27 09:14:07 by rzt              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void print_tokens(t_token *tokens) {
-    while (tokens) {
-        printf("Type: %d, Value: %s\n", tokens->type, tokens->value);
-        tokens = tokens->next;
-    }
-}
-
-void print_commands(t_cmd *cmds) {
-    int i = 0;
-    while (cmds) {
-        printf("Command %d:\n", ++i);
-        printf("  Args: ");
-        for (int j = 0; cmds->args[j]; j++)
-            printf("%s ", cmds->args[j]);
-        printf("\n");
-        printf("  Redirections:\n");
-        t_redir *r = cmds->redirections;
-        while (r) {
-            printf("    Type: %d, File: %s\n", r->type, r->file);
-            r = r->next;
-        }
-        cmds = cmds->next;
-    }
-}
-
-int main(void) {
-    char *input;
-
-    if (argc != 1 || argv[1])
+static int	handle_signals_and_cleanup(int result, char *full_input)
+{
+	if (result == -1)
 	{
+		clear_signal_received();
+		restore_terminal_after_command();
+		setup_signals(INTERACTIVE_MODE);
+		return (1);
+	}
+	if (result == 0)
+	{
+		free(full_input);
+		return (0);
+	}
+	if (get_signal_received() == SIGINT)
+	{
+		clear_signal_received();
+		restore_terminal_after_command();
+		setup_signals(INTERACTIVE_MODE);
+		return (1);
+	}
+	return (-42);
+}
+
+static int	init_minishell(t_shell **shell, char **envp)
+{
+	*shell = init_shell(envp);
+	if (!*shell)
+		return (0);
+	setup_signals(INTERACTIVE_MODE);
+	return (1);
+}
+
+static int	handle_loop_iteration(t_shell *shell)
+{
+	char	*full_input;
+	t_token	*tokens;
+	int		result;
+	int		signal_status;
+
+	full_input = ft_strdup("");
+	result = handle_input_loop(&full_input, &tokens);
+	if (result == 0)
+	{
+		free(full_input);
+		return (0);
+	}
+	signal_status = handle_signals_and_cleanup(result, full_input);
+	if (signal_status != -42)
+	{
+		free(full_input);
+		return (1);
+	}
+	if (!process_command(tokens, shell, full_input))
+	{
+		restore_terminal_after_command();
+		return (1);
+	}
+	restore_terminal_after_command();
+	return (1);
+}
+
+static int	main_loop(t_shell *shell)
+{
+	while (1)
+	{
+		if (!handle_loop_iteration(shell))
+			break ;
+	}
+	return (0);
+}
+
+int	main(int argc, char *argv[], char *envp[])
+{
+	t_shell	*shell;
+
+	if (argc != 1 || argv[1])
 		printf("This program does not accept arguments\n");
-		exit(0);
-	}    
-    while (1) {
-        input = readline("minishell> ");
-        if (!input)
-            break;
-        add_history(input);
-        
-        t_token *tokens = tokenizer(input);
-        if (!tokens) {
-            printf("Error en tokenizer\n");
-            free(input);
-            continue;
-        }
-        
-        t_cmd *cmds = parser(tokens);
-        if (!cmds) {
-            printf("Error en parser\n");
-            free(input);
-            continue;
-        }
-        
-        print_commands(cmds);
-        
-        free(input);
-    }
-    return 0;
+	if (!init_minishell(&shell, envp))
+		return (1);
+	main_loop(shell);
+	cleanup_shell(shell);
+	return (0);
 }
