@@ -35,19 +35,27 @@ std::string Phonebook::toColumn10(const std::string &s)
 
 void Phonebook::printTable() const
 {
-	std::cout << Phonebook::toColumn10("index") << "|"
+	// Línea superior decorativa
+	std::cout << std::string(4 * 10 + 4, '_') << " " << std::endl;
+	std::cout << "|" 
+		      << Phonebook::toColumn10("index") << "|"
 		      << Phonebook::toColumn10("first name") << "|"
 		      << Phonebook::toColumn10("last name") << "|"
-		      << Phonebook::toColumn10("nickname") << std::endl;
+		      << Phonebook::toColumn10("nickname") << "|" << std::endl;
+	std::cout << "|" << std::string(10, '-') << "|"
+		      << std::string(10, '-') << "|"
+		      << std::string(10, '-') << "|"
+		      << std::string(10, '-') << "|" << std::endl;
 	for (int i = 0; i < size; ++i)
 	{
 		const Contact &c = contacts[i];
 		if (c.isEmpty())
 			continue;
-		std::cout << Phonebook::toColumn10(std::string(1, '0' + i)) << "|"
+		std::cout << "|"
+			      << Phonebook::toColumn10(std::string(1, '0' + i)) << "|"
 			      << Phonebook::toColumn10(c.getFirstName()) << "|"
 			      << Phonebook::toColumn10(c.getLastName()) << "|"
-			      << Phonebook::toColumn10(c.getNickname()) << std::endl;
+			      << Phonebook::toColumn10(c.getNickname()) << "|" << std::endl;
 	}
 }
 

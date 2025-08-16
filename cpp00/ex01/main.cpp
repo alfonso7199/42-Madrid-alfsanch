@@ -24,7 +24,7 @@ static std::string readNonEmptyLine(const std::string &prompt)
 			return std::string();
 		if (!line.empty())
 			return line;
-		std::cout << "El campo no puede estar vacío. Intenta de nuevo." << std::endl;
+		std::cout << "El campo no puede estar vacío." << std::endl;
 	}
 }
 
@@ -64,7 +64,7 @@ int main()
 				&& !c.getPhoneNumber().empty() && !c.getDarkestSecret().empty())
 				phonebook.addContact(c);
 			else
-				std::cout << "Contacto inválido: no se permiten campos vacíos." << std::endl;
+				std::cout << "No se permiten campos vacíos." << std::endl;
 		}
 		else if (cmd == "SEARCH")
 		{
