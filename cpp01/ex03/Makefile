@@ -1,4 +1,5 @@
-SRC = main.cpp newZombie.cpp randomChump.cpp Zombie.cpp
+SRC = main.cpp Weapon.hpp Weapon.cpp HumanA.hpp HumanA.cpp HumanB.hpp HumanB.cpp
+
 OBJ = $(SRC:.cpp=.o)
 CC = g++
 RM = rm -f
