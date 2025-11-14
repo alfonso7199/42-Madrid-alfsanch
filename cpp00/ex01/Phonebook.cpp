@@ -15,7 +15,6 @@
 
 Phonebook::Phonebook(void) : size(0), nextIndex(0)
 {
-	std::cout << "Welcome to my phonebook, up to 8 contacts!" << std::endl;
 }
 
 void Phonebook::addContact(const Contact &contact)
@@ -35,7 +34,6 @@ std::string Phonebook::toColumn10(const std::string &s)
 
 void Phonebook::printTable() const
 {
-	// Línea superior decorativa
 	std::cout << std::string(4 * 10 + 4, '_') << " " << std::endl;
 	std::cout << "|" 
 		      << Phonebook::toColumn10("index") << "|"
@@ -68,7 +66,7 @@ void Phonebook::printContactByIndex(int index) const
 {
 	if (!isValidIndex(index))
 	{
-		std::cout << "Índice inválido" << std::endl;
+		std::cout << "Invalid index" << std::endl;
 		return;
 	}
 	const Contact &c = contacts[index];

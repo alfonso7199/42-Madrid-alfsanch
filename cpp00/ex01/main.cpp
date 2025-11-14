@@ -24,7 +24,7 @@ static std::string readNonEmptyLine(const std::string &prompt)
 			return std::string();
 		if (!line.empty())
 			return line;
-		std::cout << "El campo no puede estar vacío." << std::endl;
+		std::cout << "Write something" << std::endl;
 	}
 }
 
@@ -47,7 +47,7 @@ int main()
 
 	while (true)
 	{
-		std::cout << "Introduce comando (ADD, SEARCH, EXIT): ";
+		std::cout << "Enter command (ADD, SEARCH, EXIT): ";
 		if (!std::getline(std::cin, cmd))
 			break;
 		if (cmd == "EXIT")
@@ -64,23 +64,23 @@ int main()
 				&& !c.getPhoneNumber().empty() && !c.getDarkestSecret().empty())
 				phonebook.addContact(c);
 			else
-				std::cout << "No se permiten campos vacíos." << std::endl;
+				std::cout << "No empty fields allowed" << std::endl;
 		}
 		else if (cmd == "SEARCH")
 		{
 			phonebook.printTable();
 			std::string sidx;
-			std::cout << "Índice a mostrar: ";
+			std::cout << "Index to display: ";
 			if (!std::getline(std::cin, sidx)) break;
 			int idx = -1;
 			if (!parseIndex(sidx, idx) || !phonebook.isValidIndex(idx))
-				std::cout << "Índice inválido." << std::endl;
+				std::cout << "Invalid index." << std::endl;
 			else
 				phonebook.printContactByIndex(idx);
 		}
 		else
 		{
-			std::cout << "Comando no reconocido." << std::endl;
+			std::cout << "Unrecognized command." << std::endl;
 		}
 	}
 	return 0;
