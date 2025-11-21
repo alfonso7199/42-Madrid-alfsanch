@@ -1,20 +1,19 @@
-#include "Zombie.hpp"
+#include <iostream>
+#include <string>
 
 int main()
 {    
-    int nzombies;
-    
     std::string brain = "HI THIS IS BRAIN";
-    std::string *brainPTR = &brain;
-    std::string &brainREF = brain;
+    std::string *stringPTR = &brain;
+    std::string &stringREF = brain;
 
-    std::cout << "Memory address brain: " << &brain << std::endl;
-    std::cout << "Memory address brainPTR: " << brainPTR << std::endl;
-    std::cout << "Memory address brainREF: " << &brainREF << std::endl;
+    std::cout << "Memory address of the string variable: " << &brain << std::endl;
+    std::cout << "Memory address held by stringPTR: " << stringPTR << std::endl;
+    std::cout << "Memory address held by stringREF: " << &stringREF << std::endl;
     
-    std::cout << "Value of brain: " << brain << std::endl;
-    std::cout << "Value of brainPTR: " << *brainPTR << std::endl;
-    std::cout << "Value of brainREF: " << brainREF << std::endl;
+    std::cout << "Value of the string variable: " << brain << std::endl;
+    std::cout << "Value pointed to by stringPTR: " << *stringPTR << std::endl;
+    std::cout << "Value pointed to by stringREF: " << stringREF << std::endl;
 
     return 0;
 }
