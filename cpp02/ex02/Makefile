@@ -1,15 +1,15 @@
 SRC = main.cpp Fixed.cpp
 OBJ = $(SRC:.cpp=.o)
-CC = g++
+CXX = cg++
 RM = rm -f
-CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic
 
 NAME = fixed2
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CPPFLAGS) $(OBJ) -o $(NAME)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
 
 clean:
 	$(RM) $(OBJ)

@@ -1,15 +1,15 @@
 SRC = main.cpp
 OBJ = $(SRC:.cpp=.o)
-CC = g++
+CXX = c++
 RM = rm -f
-CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 NAME = replace
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CPPFLAGS) $(OBJ) -o $(NAME)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
 
 clean:
 	$(RM) $(OBJ)

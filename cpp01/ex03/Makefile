@@ -1,16 +1,16 @@
 SRC = main.cpp Weapon.cpp HumanA.cpp HumanB.cpp
 
 OBJ = $(SRC:.cpp=.o)
-CC = g++
+CXX = c++
 RM = rm -f
-CPPFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 NAME = violence
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CPPFLAGS) $(OBJ) -o $(NAME)
+	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
 
 clean:
 	$(RM) $(OBJ)
