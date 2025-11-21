@@ -17,6 +17,11 @@ Zombie::Zombie(std::string name) : name(name)
     std::cout << "Zombie object " << name << " created" << std::endl;
 }
 
+Zombie::Zombie() : name("")
+{
+    std::cout << "Zombie object created" << std::endl;
+}
+
 void Zombie::announce() const
 {
     std::cout << name << ": BraiiiiiiinnnzzzZ..." << std::endl;
@@ -29,5 +34,5 @@ Zombie::~Zombie()
 
 void	Zombie::setName(std::string name)
 {
-	this->_name = name;
+	this->name = name;
 }
