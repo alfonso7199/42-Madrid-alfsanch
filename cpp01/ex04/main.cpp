@@ -8,6 +8,11 @@ int	replace(char **argv, std::string content)
 	std::string		s2 = argv[3];
 	size_t			s1_len = s1.size();
 
+	if (s1.empty())
+	{
+		std::cout << "Error: s1 cannot be empty" << std::endl;
+		return (1);
+	}
 	outfile.open((std::string(argv[1]) + ".replace").c_str());
 	if (outfile.fail())
 		return (1);
@@ -35,7 +40,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 4)
 	{
-		std::cout << "uso: ./replace <file> old_word new_word" << std::endl;
+		std::cout << "Usage: ./replace <file> <s1> <s2>" << std::endl;
 		return (1);
 	}
 	infile.open(argv[1]);
