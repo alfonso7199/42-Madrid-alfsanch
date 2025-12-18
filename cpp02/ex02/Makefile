@@ -1,8 +1,8 @@
 SRC = main.cpp Fixed.cpp
 OBJ = $(SRC:.cpp=.o)
-CXX = cg++
+CXX = c++
 RM = rm -f
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 NAME = fixed2
 
