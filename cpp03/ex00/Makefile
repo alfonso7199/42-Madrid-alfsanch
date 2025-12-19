@@ -1,10 +1,10 @@
-SRC = main.cpp Fixed.cpp
+SRC = main.cpp ClapTrap.cpp
 OBJ = $(SRC:.cpp=.o)
 CXX = c++
 RM = rm -f
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-NAME = fixed1
+NAME = claptrap
 
 all: $(NAME)
 
