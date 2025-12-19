@@ -1,0 +1,20 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-g",
+      "-I./include",
+      "-I./libft",
+      "-c",
+      "-o",
+      "obj/cub3d.o",
+      "src/cub3d.c"
+    ],
+    "directory": "/home/rzt/Documents/42/cub3d",
+    "file": "/home/rzt/Documents/42/cub3d/src/cub3d.c",
+    "output": "/home/rzt/Documents/42/cub3d/obj/cub3d.o"
+  }
+]
