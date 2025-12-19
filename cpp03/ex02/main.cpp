@@ -1,5 +1,6 @@
 #include "ClapTrap.hpp"
 #include "ScavTrap.hpp"
+#include "FragTrap.hpp"
 
 int main()
 {
@@ -58,6 +59,26 @@ int main()
 	ScavTrap scav2(scav1);
 	scav2.guardGate();
 	
+	std::cout << "\nFRAGTRAP" << std::endl;
+
+	std::cout <<"FragTrap creation"<< std::endl;
+	FragTrap frag1("Frag");
+	
+	std::cout <<"FragTrap attack"<< std::endl;
+	frag1.attack("Enemy 1");
+	
+	std::cout <<"FragTrap special ability"<< std::endl;
+	frag1.highFivesGuys();
+	
+	std::cout <<"FragTrap taking damage"<< std::endl;
+	frag1.takeDamage(50);
+	frag1.attack("Enemy 2");
+	
+	std::cout <<"FragTrap repair"<< std::endl;
+	frag1.beRepaired(30);
+	frag1.highFivesGuys();
+	
+
 	std::cout <<"Destructors"<< std::endl;
 	return 0;
 }
