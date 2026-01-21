@@ -1,20 +1,17 @@
 #ifndef ICE_HPP
 #define ICE_HPP
 
-#include <string>
-#include <iostream>
-#include <ICharacter.hpp>
+#include "AMateria.hpp"
 
-class Ice
+class Ice : public AMateria
 {
-	protected:
-	
-	
-	public : 
-		Ice(std::string const &type);
+	public:
+		Ice();
+		Ice(const Ice &other);
+		Ice &operator=(const Ice &other);
+		virtual ~Ice();
 		
-		std::string const &getType() const;
-		virtual Ice *clone() const = 0;
+		virtual AMateria *clone() const;
 		virtual void use(ICharacter &target);
 };
 

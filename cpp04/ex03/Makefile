@@ -1,10 +1,10 @@
-SRC = main.cpp Fixed.cpp
+SRC = main.cpp AMateria.cpp Ice.cpp Cure.cpp Character.cpp MateriaSource.cpp
 OBJ = $(SRC:.cpp=.o)
 CXX = c++
 RM = rm -f
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-NAME = fixed1
+NAME = materia
 
 all: $(NAME)
 

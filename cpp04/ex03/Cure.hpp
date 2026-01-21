@@ -1,20 +1,17 @@
 #ifndef CURE_HPP
 #define CURE_HPP
 
-#include <string>
-#include <iostream>
-#include <ICharacter.hpp>
+#include "AMateria.hpp"
 
-class Cure
+class Cure : public AMateria
 {
-	protected:
-	
-	
-	public : 
-		Cure(std::string const &type);
+	public:
+		Cure();
+		Cure(const Cure &other);
+		Cure &operator=(const Cure &other);
+		virtual ~Cure();
 		
-		std::string const &getType() const;
-		virtual Cure *clone() const = 0;
+		virtual AMateria *clone() const;
 		virtual void use(ICharacter &target);
 };
 

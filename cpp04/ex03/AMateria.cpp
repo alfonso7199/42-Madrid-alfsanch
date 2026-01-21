@@ -1,32 +1,30 @@
 #include "AMateria.hpp"
+#include "ICharacter.hpp"
 
-AMateria::AMateria()
+AMateria::AMateria(std::string const &type) : _type(type)
 {
-	std::cout << "AMateria default constructor called" << std::endl;
 }
 
 AMateria::~AMateria()
 {
-	std::cout << "AMateria object destroyed" << std::endl;
+}
+
+AMateria::AMateria(const AMateria &other) : _type(other._type)
+{
 }
 
 AMateria &AMateria::operator=(const AMateria &other)
 {
-    std::cout << "Copy assignment operator called" << std::endl;
-	if (this != &other)
-	{
-		this->type = other.type;
-	}
+	(void)other;
 	return (*this);
 }
 
-AMateria::AMateria(const AMateria &other)
+std::string const &AMateria::getType() const
 {
-    std::cout << "Copy constructor called" << std::endl;
-	this->type = other.type;
+	return this->_type;
 }
 
-std::string AMateria::getType() const
+void AMateria::use(ICharacter &target)
 {
-	return this->type;
+	(void)target;
 }

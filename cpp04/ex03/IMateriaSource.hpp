@@ -2,8 +2,8 @@
 #define IMATERIASOURCE_HPP
 
 #include <string>
-#include <iostream>
-#include <ICharacter.hpp>
+
+class AMateria;
 
 class IMateriaSource
 {
