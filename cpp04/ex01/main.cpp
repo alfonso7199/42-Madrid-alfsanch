@@ -8,10 +8,9 @@
 
 int main()
 {
-	std::cout << "=== Basic test from subject ===" << std::endl;
 	const Animal* j = new Dog();
 	const Animal* i = new Cat();
-	delete j; // should not create a leak
+	delete j;
 	delete i;
 
 	std::cout << "ARRAY OF ANIMALS" << std::endl;
