@@ -1,6 +1,4 @@
 #!/bin/bash
-# Genera un certificado TLS autofirmado para alfsanch.42.fr
-# Se ejecuta una sola vez durante el docker build
 
 mkdir -p /etc/ssl/certs /etc/ssl/private
 

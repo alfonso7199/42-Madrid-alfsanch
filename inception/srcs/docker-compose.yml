@@ -4,8 +4,8 @@ services:
 
   nginx:
     build: ./requirements/nginx
-    image: nginx                  # nombre de la imagen construida localmente
-    pull_policy: never            # nunca intenta bajar de DockerHub
+    image: nginx 
+    pull_policy: never
     container_name: nginx
     depends_on:
       - wordpress

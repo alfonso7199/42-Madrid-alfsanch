@@ -1,12 +1,8 @@
-# Nunca subir secrets al repositorio
 secrets/
 
-# Variables de entorno (pueden contener datos sensibles)
 srcs/.env
 
-# Datos persistentes de los volúmenes Docker (se generan en la VM)
 /home/alfsanch/data/
 
-# Archivos del sistema
 .DS_Store
 *.swp
