@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+
+  nginx:
+    build: ./requirements/nginx
+    image: nginx                  # nombre de la imagen construida localmente
+    pull_policy: never            # nunca intenta bajar de DockerHub
+    container_name: nginx
+    depends_on:
+      - wordpress
+    ports:
+      - "443:443"
+    volumes:
+      - wordpress_files:/var/www/html
+    networks:
+      - inception
+    restart: unless-stopped
+    env_file:
+      - .env
+
+  wordpress:
+    build: ./requirements/wordpress
+    image: wordpress
+    pull_policy: never
+    container_name: wordpress
+    depends_on:
+      - mariadb
+    volumes:
+      - wordpress_files:/var/www/html
+    networks:
+      - inception
+    restart: unless-stopped
+    env_file:
+      - .env
+    secrets:
+      - db_password
+      - admin
+      - credentials
+
+  mariadb:
+    build: ./requirements/mariadb
+    image: mariadb
+    pull_policy: never
+    container_name: mariadb
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - inception
+    restart: unless-stopped
+    env_file:
+      - .env
+    secrets:
+      - db_password
+      - db_root_password
+
+volumes:
+  wordpress_files:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/alfsanch/data/wordpress
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/alfsanch/data/mariadb
+
+networks:
+  inception:
+    name: inception
+    driver: bridge
+
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  admin:
+    file: ../secrets/admin.txt
+  credentials:
+    file: ../secrets/credentials.txt
