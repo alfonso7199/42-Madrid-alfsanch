@@ -1,7 +1,7 @@
 NAME		= inception
 COMPOSE		= srcs/docker-compose.yml
 ENV_FILE	= srcs/.env
-DATA_PATH	= /home/alfsanch/data
+DATA_PATH	= $(HOME)/data
 SECRETS_DIR	= ./secrets
 SECRETS_FILES	= db_password.txt db_root_password.txt admin.txt credentials.txt
 
