@@ -7,6 +7,13 @@ WP_USER_PASSWORD=$(cat /run/secrets/credentials)
 
 WP_URL="https://${DOMAIN_NAME}"
 
+if [ ! -f /var/www/html/wp-login.php ]; then
+    echo "Copying WordPress core files to volume..."
+    cp -r /wordpress-src/. /var/www/html/
+    chown -R www-data:www-data /var/www/html
+    echo "WordPress core files ready."
+fi
+
 cd /var/www/html
 
 if [ ! -f wp-config.php ]; then

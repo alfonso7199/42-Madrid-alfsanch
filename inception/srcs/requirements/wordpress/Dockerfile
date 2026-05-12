@@ -17,17 +17,15 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 
 RUN curl -O https://wordpress.org/latest.tar.gz \
     && tar -xzf latest.tar.gz \
-    && mkdir -p /var/www/html \
-    && mv wordpress/* /var/www/html \
-    && rm -rf latest.tar.gz wordpress
+    && mv wordpress /wordpress-src \
+    && rm -rf latest.tar.gz
 
 COPY conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 
 COPY tools/wp_setup.sh /wp_setup.sh
 RUN chmod +x /wp_setup.sh
 
-RUN mkdir -p /run/php \
-    && chown -R www-data:www-data /var/www/html
+RUN mkdir -p /run/php /var/www/html
 
 EXPOSE 9000
 
