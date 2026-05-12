@@ -1,7 +1,6 @@
 #include "AForm.hpp"
 #include "Bureaucrat.hpp"
 
-// Exception implementations
 const char* AForm::GradeTooHighException::what() const throw()
 {
 	return "AForm Exception: Grade too high!";
@@ -17,7 +16,6 @@ const char* AForm::FormNotSignedException::what() const throw()
 	return "AForm Exception: Form is not signed!";
 }
 
-// AForm implementation
 AForm::AForm(const std::string& name, int gradeToSign, int gradeToExecute) 
 	: _name(name), _isSigned(false), _gradeToSign(gradeToSign), _gradeToExecute(gradeToExecute)
 {
