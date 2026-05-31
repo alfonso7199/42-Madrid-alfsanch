@@ -100,6 +100,3 @@ make
 - [Adminer documentation](https://www.adminer.org/)
 - [RFC — TLS 1.2](https://datatracker.ietf.org/doc/html/rfc5246) / [TLS 1.3](https://datatracker.ietf.org/doc/html/rfc8446)
 
-### AI usage
-
-AI was used to accelerate the scaffolding of boilerplate configuration files (nginx.conf, www.conf, docker-compose.yml structure, vsftpd.conf) and to cross-check Dockerfile best practices. All generated content was reviewed, understood, and adapted to the specific requirements of the project. The logic of init scripts, secret handling, Redis cache integration and the overall architecture were designed and validated manually.
