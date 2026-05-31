@@ -6,13 +6,24 @@
 
 Inception is a system administration project that consists of building a small web infrastructure using **Docker Compose**. All services run in isolated containers built from scratch — no pre-built images from DockerHub are used (except the base OS).
 
-The stack is composed of three services:
+### Mandatory services
 
-- **NGINX** — the only entry point into the infrastructure, exposed on port 443 using TLSv1.2/TLSv1.3 only.
-- **WordPress + php-fpm** — the web application, running without a web server inside.
-- **MariaDB** — the relational database that stores WordPress data.
+| Service | Description | Port |
+|---------|-------------|------|
+| **NGINX** | Only entry point, TLSv1.2/TLSv1.3 | 443 |
+| **WordPress + php-fpm** | CMS web application | 9000 (internal) |
+| **MariaDB** | Relational database | 3306 (internal) |
 
-Two named Docker volumes persist data across container restarts: one for the WordPress files and one for the database. All services communicate over a private Docker network.
+### Bonus services
+
+| Service | Description | Port |
+|---------|-------------|------|
+| **Redis** | Object cache for WordPress | 6379 (internal) |
+| **FTP** | FTP access to the WordPress volume | 21 |
+| **Static website** | Custom static site (HTML/CSS) | 80 |
+| **Adminer** | Web-based database manager | 8080 |
+
+Two named Docker volumes persist data across container restarts: one for WordPress files and one for the database. All services communicate over a private Docker network called `inception`.
 
 ### Virtual Machines vs Docker
 
@@ -66,9 +77,13 @@ make
 
 ### Access
 
-Open `https://alfsanch.42.fr` in a browser (accept the self-signed certificate warning).
-
-WordPress admin panel: `https://alfsanch.42.fr/wp-admin`
+| URL | Service |
+|-----|---------|
+| `https://alfsanch.42.fr` | WordPress site |
+| `https://alfsanch.42.fr/wp-admin` | WordPress admin panel |
+| `http://alfsanch.42.fr:80` | Static website |
+| `http://alfsanch.42.fr:8080/adminer.php` | Adminer (DB manager) |
+| FTP: `alfsanch.42.fr:21` | FTP access to WordPress files |
 
 ## Resources
 
@@ -79,8 +94,12 @@ WordPress admin panel: `https://alfsanch.42.fr/wp-admin`
 - [NGINX beginner's guide](https://nginx.org/en/docs/beginners_guide.html)
 - [MariaDB documentation](https://mariadb.com/kb/en/documentation/)
 - [php-fpm configuration](https://www.php.net/manual/en/install.fpm.configuration.php)
+- [Redis documentation](https://redis.io/docs/)
+- [Redis Object Cache plugin](https://wordpress.org/plugins/redis-cache/)
+- [vsftpd documentation](https://security.appspot.com/vsftpd.html)
+- [Adminer documentation](https://www.adminer.org/)
 - [RFC — TLS 1.2](https://datatracker.ietf.org/doc/html/rfc5246) / [TLS 1.3](https://datatracker.ietf.org/doc/html/rfc8446)
 
 ### AI usage
 
-AI was used to accelerate the scaffolding of boilerplate configuration files (nginx.conf, www.conf, docker-compose.yml structure) and to cross-check Dockerfile best practices. All generated content was reviewed, understood, and adapted to the specific requirements of the project. The logic of init scripts, secret handling and the overall architecture were designed and validated manually.
+AI was used to accelerate the scaffolding of boilerplate configuration files (nginx.conf, www.conf, docker-compose.yml structure, vsftpd.conf) and to cross-check Dockerfile best practices. All generated content was reviewed, understood, and adapted to the specific requirements of the project. The logic of init scripts, secret handling, Redis cache integration and the overall architecture were designed and validated manually.

@@ -16,29 +16,23 @@ cd 42-Madrid-alfsanch/inception
 Both `secrets/` and `srcs/.env` are gitignored and must be created manually after cloning.
 
 ```bash
-# Secrets — replace each value with your own passwords "your db pass" should be the pass you use to the service
 mkdir -p secrets
 echo "your_db_password"    > secrets/db_password.txt
 echo "your_root_password"  > secrets/db_root_password.txt
 echo "your_admin_password" > secrets/admin.txt
 echo "your_user_password"  > secrets/credentials.txt
+echo "your_ftp_password"   > secrets/ftp_password.txt
 ```
 
 ### 3. Create the `.env` file
 
-The `.env` is also gitignored. Create it at `srcs/.env`:
-Example of .env:
-
 ```bash
 cat > srcs/.env << 'EOF'
-# Domain (must match /etc/hosts entry)
 DOMAIN_NAME=alfsanch.42.fr
 
-# MariaDB
 MYSQL_DATABASE=wordpress
 MYSQL_USER=wpuser
 
-# WordPress
 WP_TITLE=Inception
 WP_ADMIN_USER=alfsanch_sudo
 WP_ADMIN_EMAIL=alfsanch_sudo@student.42madrid.com
@@ -65,7 +59,7 @@ make
 
 This will:
 1. Create `/home/alfsanch/data/wordpress` and `/home/alfsanch/data/mariadb` on the host.
-2. Build the three Docker images from their Dockerfiles.
+2. Build all Docker images from their Dockerfiles.
 3. Start all containers in detached mode.
 
 ---
@@ -74,31 +68,46 @@ This will:
 
 ```
 inception/
-├── Makefile                        # Entry point: make / make down / make fclean
+├── Makefile
 ├── .gitignore
 ├── README.md
 ├── USER_DOC.md
 ├── DEV_DOC.md
 ├── secrets/                        # ← GITIGNORED, create manually
-│   ├── credentials.txt             # WordPress admin password
+│   ├── admin.txt                   # WordPress admin password
+│   ├── credentials.txt             # WordPress user password
 │   ├── db_password.txt             # MariaDB user password
-│   └── db_root_password.txt        # MariaDB root password
+│   ├── db_root_password.txt        # MariaDB root password
+│   └── ftp_password.txt            # FTP user password
 └── srcs/
-    ├── docker-compose.yml          # Defines services, volumes, network, secrets
-    ├── .env                        # Non-sensitive env vars (domain, db name, usernames)
+    ├── docker-compose.yml
+    ├── .env                        # Non-sensitive env vars
     └── requirements/
         ├── nginx/
-        │   ├── Dockerfile          # FROM debian:bookworm, installs nginx + openssl
-        │   ├── conf/nginx.conf     # TLS-only server block, fastcgi_pass to wordpress:9000
-        │   └── tools/generate_ssl.sh  # Generates self-signed cert at build time
+        │   ├── Dockerfile
+        │   ├── conf/nginx.conf
+        │   └── tools/generate_ssl.sh
         ├── wordpress/
-        │   ├── Dockerfile          # FROM debian:bookworm, installs php8.2-fpm + wp-cli
-        │   ├── conf/www.conf       # php-fpm pool: listen 0.0.0.0:9000
-        │   └── tools/wp_setup.sh   # Downloads WP, creates config, installs, starts php-fpm
-        └── mariadb/
-            ├── Dockerfile          # FROM debian:bookworm, installs mariadb-server
-            ├── conf/my.cnf         # bind-address=0.0.0.0, skip-name-resolve
-            └── tools/init_db.sh    # Initializes DB + users on first boot, starts mysqld
+        │   ├── Dockerfile
+        │   ├── conf/www.conf
+        │   └── tools/wp_setup.sh
+        ├── mariadb/
+        │   ├── Dockerfile
+        │   ├── conf/my.cnf
+        │   ├── conf/init.sql
+        │   └── tools/init_db.sh
+        ├── redis/
+        │   └── Dockerfile
+        ├── ftp/
+        │   ├── Dockerfile
+        │   └── tools/
+        │       ├── vsftpd.conf
+        │       └── ftp_setup.sh
+        ├── static/
+        │   ├── Dockerfile
+        │   └── index.html
+        └── adminer/
+            └── Dockerfile
 ```
 
 ---
@@ -114,28 +123,31 @@ docker compose -f srcs/docker-compose.yml up -d wordpress
 docker exec -it wordpress bash
 docker exec -it mariadb bash
 docker exec -it nginx bash
+docker exec -it redis bash
+docker exec -it ftp bash
 
 # Connect to MariaDB directly
 docker exec -it mariadb mysql -u wpuser -p wordpress
+
+# Test Redis connection
+docker exec -it redis redis-cli ping
 
 # List volumes
 docker volume ls
 
 # Inspect a volume
-docker volume inspect inception_wordpress_files
-docker volume inspect inception_db_data
+docker volume inspect srcs_wordpress_files
+docker volume inspect srcs_db_data
 ```
 
 ---
 
 ## Where data is stored and how it persists
 
-Both named volumes are backed by directories on the host VM:
-
 | Volume | Host path | Container path |
 |--------|-----------|----------------|
-| `inception_wordpress_files` | `/home/alfsanch/data/wordpress` | `/var/www/html` |
-| `inception_db_data` | `/home/alfsanch/data/mariadb` | `/var/lib/mysql` |
+| `srcs_wordpress_files` | `/home/alfsanch/data/wordpress` | `/var/www/html` (wordpress, nginx, ftp) |
+| `srcs_db_data` | `/home/alfsanch/data/mariadb` | `/var/lib/mysql` |
 
 Data survives `make down` (containers removed) but is deleted by `make fclean`.
 
@@ -153,6 +165,22 @@ This way passwords never appear in environment variables, image layers, or `dock
 
 ---
 
+## Bonus services
+
+### Redis
+Redis runs as an object cache for WordPress. On first boot, `wp_setup.sh` installs and activates the `redis-cache` plugin via WP-CLI, sets `WP_REDIS_HOST=redis` in `wp-config.php`, and enables the object cache. Redis is internal only — not exposed outside the Docker network.
+
+### FTP
+The FTP container (`vsftpd`) runs in passive mode on ports 21 and 21100–21110. It creates a system user `ftpuser` whose home directory is the WordPress volume (`/var/www/html`). The FTP password is read from `/run/secrets/ftp_password`. Connect with any FTP client in passive mode.
+
+### Static website
+A lightweight nginx container serves the custom `index.html` on port 80. No PHP, no database dependency — purely static.
+
+### Adminer
+A single PHP file served by `php -S` on port 8080. Access at `http://alfsanch.42.fr:8080/adminer.php`. Connect with server `mariadb`, user `wpuser`, password from `secrets/db_password.txt`, database `wordpress`.
+
+---
+
 ## Useful debugging commands
 
 ```bash
@@ -165,6 +193,14 @@ docker exec wordpress ss -tlnp | grep 9000
 # Check MariaDB is running
 docker exec mariadb mysqladmin -u root -p status
 
+# Check Redis is responding
+docker exec redis redis-cli ping
+
+# Check Redis cache status from WordPress
+docker exec wordpress wp redis status --allow-root --path=/var/www/html
+
 # Follow logs of a single service
 docker logs -f nginx
+docker logs -f wordpress
+docker logs -f redis
 ```

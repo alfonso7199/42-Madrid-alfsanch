@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creatine Journey – Daily Creatine Tracker</title>
+  <meta name="description" content="Track your daily creatine with one tap. Reminders, monthly calendar and progress stats. Free on Android and iOS.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://creatinejourney.netlify.app/">
+  <meta property="og:title" content="Creatine Journey – Daily Creatine Tracker">
+  <meta property="og:description" content="One tap to log your creatine. Build the habit. See the results.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Nunito: rounded, informal, sporty energy -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"MobileApplication","name":"Creatine Journey","description":"Daily creatine intake tracker with reminders and monthly progress calendar.","operatingSystem":"Android, iOS","applicationCategory":"HealthApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"SonolDev"}}
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #111214;
+      --bg2:    #1a1c1f;
+      --card:   #1e2124;
+      --border: #2a2d31;
+      --green:  #5AFFB0;
+      --blue:   #4A9FFF;
+      --text:   #f0f0f0;
+      --mid:    #888;
+      --dim:    #555;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 400;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 60px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-size: 17px; font-weight: 900;
+      color: var(--text); letter-spacing: -.3px;
+    }
+    .logo span { color: var(--green); }
+    .nav-btns { display: flex; gap: 8px; }
+    .nbtn {
+      padding: 7px 16px; border-radius: 8px;
+      font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
+      text-decoration: none; transition: all .15s; letter-spacing: .2px;
+    }
+    .nbtn-outline { color: var(--mid); border: 1px solid var(--border); }
+    .nbtn-outline:hover { color: var(--text); border-color: #444; }
+    .nbtn-fill { background: var(--green); color: #111214; }
+    .nbtn-fill:hover { background: #72ffc0; }
+
+    /* ── SHARED ── */
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 40px; }
+
+    section { position: relative; }
+
+    /* ── HERO ── */
+    .hero {
+      padding-top: 110px; padding-bottom: 80px;
+      display: grid; grid-template-columns: 1fr 220px;
+      gap: 48px; align-items: center;
+      max-width: 1080px; margin: 0 auto; padding-left: 40px; padding-right: 40px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: var(--green); color: #111214;
+      font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 4px;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: clamp(44px, 6vw, 80px);
+      font-weight: 900; line-height: 1.05;
+      letter-spacing: -1.5px;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+    h1 .accent { color: var(--green); }
+
+    .hero-p {
+      font-size: 17px; font-weight: 400; color: var(--mid);
+      line-height: 1.65; max-width: 440px; margin-bottom: 36px;
+    }
+
+    .store-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .sbtn {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 12px 22px; border-radius: 10px;
+      font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
+      text-decoration: none; transition: transform .15s;
+      letter-spacing: .2px;
+    }
+    .sbtn:hover { transform: translateY(-2px); }
+    .sbtn svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .sbtn-green { background: var(--green); color: #111214; }
+    .sbtn-dark  { background: var(--card); border: 1px solid var(--border); color: var(--mid); }
+    .sbtn-dark:hover { color: var(--text); border-color: #444; }
+    .sbtn-dark .soon { font-size: 11px; font-weight: 600; opacity: .5; }
+
+    /* ── PHONE ── */
+    .phone {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 34px;
+      padding: 16px 14px 24px;
+      box-shadow: 0 24px 60px rgba(0,0,0,.5);
+    }
+    .ph-notch-row { display: flex; justify-content: center; margin-bottom: 16px; }
+    .ph-notch { width: 56px; height: 4px; background: var(--border); border-radius: 2px; }
+    .ph-appname { font-size: 9px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); text-align: center; margin-bottom: 16px; }
+    .ph-ring { width: 116px; height: 116px; border-radius: 50%; background: #1a2e22; border: 1.5px solid #2a4835; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; }
+    .ph-btn { width: 74px; height: 74px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 24px rgba(90,255,176,.3); }
+    .ph-btn svg { width: 28px; height: 28px; color: #111214; stroke-width: 3; }
+    .ph-status { text-align: center; font-size: 9px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--green); margin-bottom: 14px; }
+    .ph-sep { height: 1px; background: var(--border); margin-bottom: 14px; }
+    .ph-stats { display: flex; }
+    .ph-stat { flex: 1; text-align: center; }
+    .ph-num { font-size: 26px; font-weight: 900; color: var(--blue); line-height: 1; }
+    .ph-lbl { font-size: 8px; font-weight: 700; color: var(--dim); letter-spacing: 1px; text-transform: uppercase; margin-top: 3px; }
+
+    /* ── GREEN BAND ── */
+    .band {
+      background: var(--green); color: #111214;
+      padding: 48px 40px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    }
+    .band-text h2 { font-size: clamp(26px, 3.5vw, 40px); font-weight: 900; letter-spacing: -1px; line-height: 1.1; }
+    .band-text p { font-size: 15px; font-weight: 600; opacity: .7; margin-top: 6px; }
+    .band-stat {
+      text-align: right; flex-shrink: 0;
+    }
+    .band-stat-num { font-size: 72px; font-weight: 900; line-height: 1; letter-spacing: -3px; }
+    .band-stat-lbl { font-size: 13px; font-weight: 700; opacity: .6; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ── FEATURES ── */
+    #features { padding: 80px 0; border-top: 1px solid var(--border); }
+
+    .sec-intro { margin-bottom: 48px; }
+    .sec-label { font-size: 12px; font-weight: 800; color: var(--green); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+    h2.sec-h { font-size: clamp(28px, 4vw, 42px); font-weight: 900; letter-spacing: -1px; color: var(--text); }
+
+    .feat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); }
+    .feat-item {
+      background: var(--bg);
+      padding: 32px 28px;
+      transition: background .2s;
+    }
+    .feat-item:hover { background: var(--card); }
+    .feat-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); margin-bottom: 20px; }
+    .feat-dot.blue { background: var(--blue); }
+    .feat-item h3 { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 8px; letter-spacing: -.2px; }
+    .feat-item p { font-size: 14px; font-weight: 400; color: var(--mid); line-height: 1.6; }
+
+    /* ── CONTACT ── */
+    #contact { padding: 80px 0; border-top: 1px solid var(--border); }
+
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .contact-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 40px 36px;
+    }
+    .contact-card h3 { font-size: 26px; font-weight: 900; letter-spacing: -.5px; margin-bottom: 10px; }
+    .contact-card p { font-size: 14px; font-weight: 400; color: var(--mid); line-height: 1.65; margin-bottom: 24px; }
+    .email-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 18px;
+      color: var(--text); text-decoration: none;
+      font-size: 14px; font-weight: 700;
+      transition: border-color .15s;
+    }
+    .email-btn:hover { border-color: var(--green); color: var(--green); }
+    .email-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .by-tag { margin-top: 16px; font-size: 13px; color: var(--dim); font-weight: 600; }
+    .by-tag strong { color: var(--mid); }
+
+    .cta-card {
+      background: var(--green); border-radius: 14px;
+      padding: 40px 36px;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .cta-card h3 { font-size: 24px; font-weight: 900; color: #111214; letter-spacing: -.5px; line-height: 1.2; margin-bottom: 16px; }
+    .cta-card p { font-size: 14px; color: rgba(17,18,20,.6); font-weight: 600; margin-bottom: 28px; line-height: 1.5; }
+    .cta-card a.store-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #111214; color: var(--green);
+      border-radius: 8px; padding: 12px 18px;
+      text-decoration: none; font-size: 14px; font-weight: 800;
+      transition: opacity .15s;
+    }
+    .cta-card a.store-link:hover { opacity: .85; }
+    .cta-card a.store-link svg { width: 16px; height: 16px; }
+
+    /* ── PRIVACY ── */
+    #privacy { padding: 80px 0 60px; border-top: 1px solid var(--border); }
+
+    .lang-row { display: flex; gap: 8px; margin-bottom: 28px; }
+    .lb {
+      padding: 6px 16px; border-radius: 6px;
+      border: 1px solid var(--border); background: transparent;
+      color: var(--dim); font-family: 'Nunito', sans-serif;
+      font-size: 13px; font-weight: 700; cursor: pointer; transition: all .15s;
+    }
+    .lb.on { background: var(--green); border-color: var(--green); color: #111214; }
+
+    .policy-box {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 40px;
+    }
+    .policy-box .upd { font-size: 13px; color: var(--dim); font-weight: 600; margin-bottom: 16px; }
+    .policy-box > div > p:first-of-type { font-size: 15px; color: var(--mid); line-height: 1.7; margin-bottom: 8px; font-weight: 400; }
+    .policy-box h3 {
+      font-size: 13px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--green); margin: 28px 0 8px;
+      padding-top: 28px; border-top: 1px solid var(--border);
+    }
+    .policy-box h3:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
+    .policy-box p { font-size: 14px; color: var(--mid); line-height: 1.75; font-weight: 400; }
+    .policy-box strong { color: var(--text); font-weight: 700; }
+    .policy-box a { color: var(--green); text-decoration: none; }
+    .policy-box a:hover { text-decoration: underline; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1080px; margin: 0 auto;
+    }
+    .f-logo { font-size: 14px; font-weight: 900; color: var(--dim); }
+    .f-logo span { color: var(--green); }
+    footer p { font-size: 12px; color: var(--dim); font-weight: 600; }
+    footer a { color: var(--dim); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width: 780px) {
+      nav { padding: 0 20px; }
+      .hero { grid-template-columns: 1fr; padding: 96px 20px 60px; }
+      .phone { display: none; }
+      .wrap { padding: 0 20px; }
+      .band { flex-direction: column; align-items: flex-start; text-align: left; padding: 40px 20px; }
+      .band-stat { text-align: left; }
+      #features { padding: 60px 0; }
+      .feat-grid { grid-template-columns: 1fr 1fr; }
+      #contact { padding: 60px 0; }
+      .contact-grid { grid-template-columns: 1fr; }
+      #privacy { padding: 60px 0 40px; }
+      .policy-box { padding: 24px 20px; }
+      footer { flex-direction: column; gap: 8px; text-align: center; padding: 24px 20px; }
+    }
+    @media(max-width: 480px) {
+      .feat-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Creatine<span>Journey</span></div>
+  <div class="nav-btns">
+    <a href="#contact" class="nbtn nbtn-outline">Contact</a>
+    <a href="#privacy" class="nbtn nbtn-fill">Privacy Policy</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section>
+  <div class="hero">
+    <div>
+      <div class="hero-tag">Free · Android &amp; iOS</div>
+      <h1>Never miss<br>your <span class="accent">creatine</span><br>again.</h1>
+      <p class="hero-p">One tap to log your daily dose. Reminders when you need them, a calendar to see your streak, and nothing else in the way.</p>
+      <div class="store-row">
+        <a href="https://play.google.com/store/apps/details?id=com.alfonso1799.CreatineCalendar&hl=es&pli=1" class="sbtn sbtn-green" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.33.19.7.24 1.06.14l12.04-6.95-2.54-2.54-10.56 9.35zm-1.1-20.3A2 2 0 002 5v14c0 .56.22 1.06.59 1.43l.08.07 7.84-7.84v-.18L2.08 3.46zm18.29 8.3-2.56-1.48-2.83 2.83 2.83 2.82 2.57-1.48c.73-.42.73-1.27-.01-1.69zM4.24.1L16.28 7.04l-2.54 2.55L3.18.24C3.52.14 3.9.19 4.24.1z"/></svg>
+          Google Play
+        </a>
+        <a href="https://apps.apple.com/es/app/creatine-journey/id6763736198" class="sbtn sbtn-green" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.15-2.18 1.28-2.16 3.81.03 3.02 2.65 4.03 2.68 4.04l-.07.27zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          App Store
+        </a>
+      </div>
+    </div>
+
+    <div class="phone">
+      <div class="ph-notch-row"><div class="ph-notch"></div></div>
+      <div class="ph-appname">Creatine Journey</div>
+      <div class="ph-ring">
+        <div class="ph-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
+      <div class="ph-status">Taken today ✓</div>
+      <div class="ph-sep"></div>
+      <div class="ph-stats">
+        <div class="ph-stat"><div class="ph-num">28</div><div class="ph-lbl">Days</div></div>
+        <div class="ph-stat"><div class="ph-num">93%</div><div class="ph-lbl">Done</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GREEN BAND -->
+<div class="band">
+  <div class="band-text">
+    <h2>Consistency is<br>the only secret.</h2>
+    <p>Creatine only works if you take it every day. That's literally it.</p>
+  </div>
+  <div class="band-stat">
+    <div class="band-stat-num">1</div>
+    <div class="band-stat-lbl">tap per day</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="wrap">
+    <div class="sec-intro">
+      <div class="sec-label">Features</div>
+      <h2 class="sec-h">Simple tools,<br>real results.</h2>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-item">
+        <div class="feat-dot"></div>
+        <h3>One-tap tracking</h3>
+        <p>Log your dose in a second. No forms, no accounts, no friction.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-dot blue"></div>
+        <h3>Monthly calendar</h3>
+        <p>See every day you took it. Watch your streak grow and stay motivated.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-dot"></div>
+        <h3>Custom reminders</h3>
+        <p>Get notified at the time you choose. Turn them on or off, your call.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-dot blue"></div>
+        <h3>Progress stats</h3>
+        <p>Monthly percentage. You'll know exactly how consistent you've been.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-dot"></div>
+        <h3>Dark &amp; light mode</h3>
+        <p>Follows your system. Looks sharp either way.</p>
+      </div>
+      <div class="feat-item">
+        <div class="feat-dot blue"></div>
+        <h3>100% private</h3>
+        <p>Everything on your device. No server, no tracking, no accounts.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrap">
+    <div class="sec-intro">
+      <div class="sec-label">Support</div>
+      <h2 class="sec-h">Need help?</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h3>Drop us a message</h3>
+        <p>Questions, bugs, or ideas — we read every email and try to reply fast.</p>
+        <a href="#" class="email-btn js-mail" onclick="openMail(event)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Contact us by email
+        </a>
+        <p class="by-tag">By <strong>SonolDev</strong></p>
+      </div>
+      <div class="cta-card">
+        <div>
+          <h3>Available on<br>Android &amp; iOS.</h3>
+          <p>Download it now on Google Play or the App Store. Free, no subscriptions.</p>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="https://play.google.com/store/apps/details?id=com.alfonso1799.CreatineCalendar&hl=es&pli=1" class="store-link" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.33.19.7.24 1.06.14l12.04-6.95-2.54-2.54-10.56 9.35zm-1.1-20.3A2 2 0 002 5v14c0 .56.22 1.06.59 1.43l.08.07 7.84-7.84v-.18L2.08 3.46zm18.29 8.3-2.56-1.48-2.83 2.83 2.83 2.82 2.57-1.48c.73-.42.73-1.27-.01-1.69zM4.24.1L16.28 7.04l-2.54 2.55L3.18.24C3.52.14 3.9.19 4.24.1z"/></svg>
+            Google Play
+          </a>
+          <a href="https://apps.apple.com/es/app/creatine-journey/id6763736198" class="store-link" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.15-2.18 1.28-2.16 3.81.03 3.02 2.65 4.03 2.68 4.04l-.07.27zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            App Store
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY -->
+<section id="privacy">
+  <div class="wrap">
+    <div class="sec-intro">
+      <div class="sec-label">Legal</div>
+      <h2 class="sec-h">Privacy Policy</h2>
+    </div>
+    <div class="lang-row">
+      <button class="lb on" onclick="setL('en',this)">English</button>
+      <button class="lb" onclick="setL('es',this)">Español</button>
+    </div>
+    <div class="policy-box">
+      <div id="l-en">
+        <p class="upd">Last updated: April 28, 2026</p>
+        <p>Creatine Journey is a personal habit tracking app by SonolDev. We care about your privacy — here's the short version: we collect nothing.</p>
+        <h3>1. Data Collection</h3>
+        <p>Creatine Journey <strong>does not collect any personal data</strong>. Your intake records and reminder settings are stored only on your device and never sent anywhere.</p>
+        <h3>2. Local Notifications</h3>
+        <p>Reminders are local notifications generated on your device. No data is sent externally.</p>
+        <h3>3. Third Parties</h3>
+        <p>We don't share anything with third parties. No analytics, no ads, no external services.</p>
+        <h3>4. Data Security</h3>
+        <p>Your data stays on your device, protected by iOS and Android's built-in security.</p>
+        <h3>5. Children</h3>
+        <p>We don't collect data from anyone, including children under 13.</p>
+        <h3>6. Changes</h3>
+        <p>If we update this policy, we'll post it here with a new date.</p>
+        <h3>7. Contact</h3>
+        <p>Questions? <a href="#" class="js-mail" onclick="openMail(event)">Contact us by email</a></p>
+      </div>
+      <div id="l-es" style="display:none">
+        <p class="upd">Última actualización: 28 de abril de 2026</p>
+        <p>Creatine Journey es una app de seguimiento de hábitos de SonolDev. Nos importa tu privacidad — versión corta: no recogemos nada.</p>
+        <h3>1. Recopilación de datos</h3>
+        <p>Creatine Journey <strong>no recopila ningún dato personal</strong>. Tus registros y recordatorios se guardan solo en tu dispositivo y no se envían a ningún lado.</p>
+        <h3>2. Notificaciones locales</h3>
+        <p>Los recordatorios son notificaciones locales que se generan en tu dispositivo. No se envía nada al exterior.</p>
+        <h3>3. Terceros</h3>
+        <p>No compartimos nada con terceros. Sin analítica, sin publicidad, sin servicios externos.</p>
+        <h3>4. Seguridad</h3>
+        <p>Tus datos permanecen en tu dispositivo, protegidos por la seguridad integrada de iOS y Android.</p>
+        <h3>5. Menores</h3>
+        <p>No recogemos datos de nadie, incluidos menores de 13 años.</p>
+        <h3>6. Cambios</h3>
+        <p>Si actualizamos esta política, lo publicaremos aquí con una nueva fecha.</p>
+        <h3>7. Contacto</h3>
+        <p>¿Preguntas? <a href="#" class="js-mail" onclick="openMail(event)">Contáctanos por email</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-logo">Creatine<span>Journey</span></div>
+  <p>© 2026 SonolDev &nbsp;·&nbsp; <a href="#privacy">Privacy Policy</a> &nbsp;·&nbsp; <a href="#contact">Contact</a></p>
+</footer>
+
+<script>
+  // Email obfuscado — nunca visible en el HTML, se decodifica solo al hacer clic
+  const _m = 'YWxmb25zbzE3OTlAZ21haWwuY29t';
+  function openMail(e) {
+    e.preventDefault();
+    window.location.href = 'mailto:' + atob(_m);
+  }
+
+  function setL(l, btn) {
+    document.getElementById('l-en').style.display = l==='en' ? '' : 'none';
+    document.getElementById('l-es').style.display = l==='es' ? '' : 'none';
+    document.querySelectorAll('.lb').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+  }
+</script>
+</body>
+</html>

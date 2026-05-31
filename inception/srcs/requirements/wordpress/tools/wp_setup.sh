@@ -28,7 +28,7 @@ if [ ! -f wp-config.php ]; then
 fi
 
 echo "Waiting for MariaDB to be ready..."
-until wp db check --allow-root 2>/dev/null; do
+until wp db query "SELECT 1;" --allow-root 2>/dev/null; do
     echo "  MariaDB not ready yet, retrying in 2s..."
     sleep 2
 done
@@ -60,5 +60,13 @@ if ! wp core is-installed --allow-root 2>/dev/null; then
 else
     echo "WordPress already installed, skipping setup."
 fi
+
+if ! wp plugin is-installed redis-cache --allow-root 2>/dev/null; then
+    echo "Installing redis-cache plugin..."
+    wp plugin install redis-cache --activate --allow-root
+fi
+wp config set WP_REDIS_HOST redis --allow-root
+wp config set WP_CACHE true --raw --allow-root
+wp redis enable --allow-root 2>/dev/null || true
 
 exec php-fpm8.2 -F
