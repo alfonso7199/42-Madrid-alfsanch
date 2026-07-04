@@ -1,10 +1,8 @@
-version: '3.8'
-
 services:
 
   nginx:
     build: ./requirements/nginx
-    image: nginx 
+    image: nginx
     pull_policy: never
     container_name: nginx
     depends_on:
@@ -26,6 +24,7 @@ services:
     container_name: wordpress
     depends_on:
       - mariadb
+      - redis
     volumes:
       - wordpress_files:/var/www/html
     networks:
@@ -53,6 +52,53 @@ services:
     secrets:
       - db_password
       - db_root_password
+
+  redis:
+    build: ./requirements/redis
+    image: redis
+    pull_policy: never
+    container_name: redis
+    networks:
+      - inception
+    restart: unless-stopped
+
+  ftp:
+    build: ./requirements/ftp
+    image: ftp
+    pull_policy: never
+    container_name: ftp
+    ports:
+      - "21:21"
+      - "21100-21110:21100-21110"
+    volumes:
+      - wordpress_files:/var/www/html
+    networks:
+      - inception
+    restart: unless-stopped
+    secrets:
+      - ftp_password
+
+  static:
+    build: ./requirements/static
+    image: static
+    pull_policy: never
+    container_name: static
+    ports:
+      - "80:80"
+    networks:
+      - inception
+    restart: unless-stopped
+
+  adminer:
+    build: ./requirements/adminer
+    image: adminer
+    pull_policy: never
+    container_name: adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - inception
+    restart: unless-stopped
 
 volumes:
   wordpress_files:
@@ -82,3 +128,5 @@ secrets:
     file: ../secrets/admin.txt
   credentials:
     file: ../secrets/credentials.txt
+  ftp_password:
+    file: ../secrets/ftp_password.txt

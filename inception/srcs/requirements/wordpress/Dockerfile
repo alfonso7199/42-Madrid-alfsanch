@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     php8.2-xml \
     php8.2-zip \
     curl \
+    default-mysql-client \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \

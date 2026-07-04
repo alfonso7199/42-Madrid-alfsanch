@@ -3,7 +3,7 @@ COMPOSE		= srcs/docker-compose.yml
 ENV_FILE	= srcs/.env
 DATA_PATH	= $(HOME)/data
 SECRETS_DIR	= ./secrets
-SECRETS_FILES	= db_password.txt db_root_password.txt admin.txt credentials.txt
+SECRETS_FILES	= db_password.txt db_root_password.txt admin.txt credentials.txt ftp_password.txt
 
 all: up
 
