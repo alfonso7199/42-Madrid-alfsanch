@@ -6,7 +6,7 @@
 
 int main(void)
 {
-	std::cout << "=== vector ===" << std::endl;
+	std::cout << "vector" << std::endl;
 	std::vector<int> v;
 	v.push_back(1);
 	v.push_back(2);
@@ -32,7 +32,7 @@ int main(void)
 		std::cout << "Not found: " << e.what() << std::endl;
 	}
 
-	std::cout << "=== list ===" << std::endl;
+	std::cout << "list" << std::endl;
 	std::list<int> l;
 	l.push_back(10);
 	l.push_back(20);
@@ -55,7 +55,7 @@ int main(void)
 		std::cout << "Not found: " << e.what() << std::endl;
 	}
 
-	std::cout << "=== deque ===" << std::endl;
+	std::cout << "deque" << std::endl;
 	std::deque<int> d;
 	d.push_back(7);
 	d.push_back(8);
@@ -70,7 +70,7 @@ int main(void)
 		std::cout << "Error: " << e.what() << std::endl;
 	}
 
-	std::cout << "=== const container ===" << std::endl;
+	std::cout << "const container" << std::endl;
 	const std::vector<int> cv(v);
 	try
 	{

@@ -6,7 +6,7 @@
 
 int main(void)
 {
-	std::cout << "=== subject example ===" << std::endl;
+	std::cout << "subject example" << std::endl;
 	{
 		Span sp = Span(5);
 		sp.addNumber(6);
@@ -18,7 +18,7 @@ int main(void)
 		std::cout << sp.longestSpan() << std::endl;
 	}
 
-	std::cout << "=== overflow test ===" << std::endl;
+	std::cout << "overflow test" << std::endl;
 	{
 		Span sp(3);
 		sp.addNumber(1);
@@ -34,7 +34,7 @@ int main(void)
 		}
 	}
 
-	std::cout << "=== too few elements ===" << std::endl;
+	std::cout << "too few elements" << std::endl;
 	{
 		Span sp(1);
 		sp.addNumber(42);
@@ -48,7 +48,7 @@ int main(void)
 		}
 	}
 
-	std::cout << "=== addRange with 10000 numbers ===" << std::endl;
+	std::cout << "addRange with 10000 numbers" << std::endl;
 	{
 		std::srand(std::time(NULL));
 		Span sp(10000);
@@ -60,7 +60,7 @@ int main(void)
 		std::cout << "longestSpan:  " << sp.longestSpan()  << std::endl;
 	}
 
-	std::cout << "=== addRange overflow ===" << std::endl;
+	std::cout << "addRange overflow" << std::endl;
 	{
 		Span sp(5);
 		std::vector<int> big(10, 1);

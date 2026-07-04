@@ -4,7 +4,7 @@
 
 int main(void)
 {
-	std::cout << "=== MutantStack ===" << std::endl;
+	std::cout << "MutantStack" << std::endl;
 	{
 		MutantStack<int> mstack;
 		mstack.push(5);
@@ -29,7 +29,7 @@ int main(void)
 		std::stack<int> s(mstack);
 	}
 
-	std::cout << "=== std::list (same output) ===" << std::endl;
+	std::cout << "std::list (same output)" << std::endl;
 	{
 		std::list<int> mstack;
 		mstack.push_back(5);
@@ -53,7 +53,7 @@ int main(void)
 		}
 	}
 
-	std::cout << "=== const iterator test ===" << std::endl;
+	std::cout << "const iterator test" << std::endl;
 	{
 		MutantStack<int> ms;
 		ms.push(10);

@@ -26,7 +26,7 @@ void Span::addNumber(int n)
 	_data.push_back(n);
 }
 
-int Span::shortestSpan() const
+long Span::shortestSpan() const
 {
 	if (_data.size() < 2)
 		throw std::logic_error("Span: need at least 2 numbers");
@@ -34,22 +34,22 @@ int Span::shortestSpan() const
 	std::vector<int> sorted(_data);
 	std::sort(sorted.begin(), sorted.end());
 
-	int shortest = INT_MAX;
+	long shortest = static_cast<long>(INT_MAX) - static_cast<long>(INT_MIN);
 	for (std::size_t i = 1; i < sorted.size(); ++i)
 	{
-		int diff = sorted[i] - sorted[i - 1];
+		long diff = static_cast<long>(sorted[i]) - static_cast<long>(sorted[i - 1]);
 		if (diff < shortest)
 			shortest = diff;
 	}
 	return shortest;
 }
 
-int Span::longestSpan() const
+long Span::longestSpan() const
 {
 	if (_data.size() < 2)
 		throw std::logic_error("Span: need at least 2 numbers");
 
 	int minVal = *std::min_element(_data.begin(), _data.end());
 	int maxVal = *std::max_element(_data.begin(), _data.end());
-	return maxVal - minVal;
+	return static_cast<long>(maxVal) - static_cast<long>(minVal);
 }
