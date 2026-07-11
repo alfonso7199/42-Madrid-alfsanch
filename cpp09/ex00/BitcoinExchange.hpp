@@ -7,20 +7,20 @@
 class BitcoinExchange
 {
 private:
-	std::map<std::string, double>	_db;
+	std::map<std::string, double>	_rates;
 
-	void	loadDb(const std::string& dbFile);
+	void	loadDatabase(const std::string& file);
 	bool	isValidDate(const std::string& date) const;
-	bool	isValidValue(const std::string& raw, double& out) const;
+	bool	isValidValue(const std::string& str, double& value) const;
 
 public:
 	BitcoinExchange();
-	BitcoinExchange(const std::string& dbFile);
+	BitcoinExchange(const std::string& file);
 	BitcoinExchange(const BitcoinExchange& other);
 	BitcoinExchange& operator=(const BitcoinExchange& other);
 	~BitcoinExchange();
 
-	void	process(const std::string& inputFile) const;
+	void	process(const std::string& file) const;
 };
 
 #endif

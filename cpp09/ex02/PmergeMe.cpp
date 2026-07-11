@@ -6,30 +6,34 @@
 #include <ctime>
 #include <climits>
 
-static std::vector<int> jacOrder(int n)
+static std::vector<int> insertOrder(int count)
 {
-	if (n <= 0)
+	if (count <= 0)
 		return std::vector<int>();
 
-	std::vector<int> lo;
-	lo.push_back(1);
-	lo.push_back(3);
-	while (lo.back() <= n)
-		lo.push_back(lo[lo.size() - 1] + 2 * lo[lo.size() - 2]);
+	std::vector<int> jacobsthal;
+	jacobsthal.push_back(1);
+	jacobsthal.push_back(3);
+	while (jacobsthal.back() <= count)
+	{
+		std::size_t last = jacobsthal.size() - 1;
+		jacobsthal.push_back(jacobsthal[last] + 2 * jacobsthal[last - 1]);
+	}
 
-	std::vector<bool>	done(n, false);
+	std::vector<bool>	used(count, false);
 	std::vector<int>	order;
 
-	for (std::size_t k = 0; k + 1 < lo.size(); ++k)
+	for (std::size_t i = 0; i + 1 < jacobsthal.size(); ++i)
 	{
-		int hi = std::min(lo[k + 1] - 1, n);
-		int lb = lo[k];
-		for (int p = hi; p >= lb; --p)
+		int high = std::min(jacobsthal[i + 1] - 1, count);
+		int low  = jacobsthal[i];
+
+		for (int n = high; n >= low; --n)
 		{
-			int idx = p - 1;
-			if (idx >= 0 && idx < n && !done[idx])
+			int idx = n - 1;
+			if (idx >= 0 && idx < count && !used[idx])
 			{
-				done[idx] = true;
+				used[idx] = true;
 				order.push_back(idx);
 			}
 		}
@@ -37,61 +41,61 @@ static std::vector<int> jacOrder(int n)
 	return order;
 }
 
-static void vecBinInsert(std::vector<int>& chain, int val,
-	std::vector<int>::iterator bound)
+static void insertSorted(std::vector<int>& chain, int value, std::vector<int>::iterator bound)
 {
-	std::vector<int>::iterator lo = chain.begin();
-	std::vector<int>::iterator hi = bound;
-	while (lo < hi)
+	std::vector<int>::iterator low  = chain.begin();
+	std::vector<int>::iterator high = bound;
+
+	while (low < high)
 	{
-		std::vector<int>::iterator mid = lo + std::distance(lo, hi) / 2;
-		if (*mid < val)
-			lo = mid + 1;
+		std::vector<int>::iterator mid = low + std::distance(low, high) / 2;
+		if (*mid < value)
+			low = mid + 1;
 		else
-			hi = mid;
+			high = mid;
 	}
-	chain.insert(lo, val);
+	chain.insert(low, value);
 }
 
-static void fordJohnsonVec(std::vector<int>& v)
+static void fordJohnson(std::vector<int>& values)
 {
-	int n = (int)v.size();
-	if (n <= 1)
+	int size = (int)values.size();
+	if (size <= 1)
 		return;
-	if (n == 2)
+	if (size == 2)
 	{
-		if (v[0] > v[1])
-			std::swap(v[0], v[1]);
+		if (values[0] > values[1])
+			std::swap(values[0], values[1]);
 		return;
 	}
 
-	bool	hasOdd  = (n % 2) != 0;
-	int		oddVal  = hasOdd ? v[n - 1] : 0;
-	int		pairCnt = n / 2;
+	bool	hasExtra  = (size % 2) != 0;
+	int		extra     = hasExtra ? values[size - 1] : 0;
+	int		pairCount = size / 2;
 
-	std::vector<std::pair<int, int> > pairs(pairCnt);
-	for (int i = 0; i < pairCnt; ++i)
+	std::vector<std::pair<int, int> > pairs(pairCount);
+	for (int i = 0; i < pairCount; ++i)
 	{
-		int a = v[2 * i];
-		int b = v[2 * i + 1];
+		int a = values[2 * i];
+		int b = values[2 * i + 1];
 		pairs[i] = (a >= b) ? std::make_pair(a, b) : std::make_pair(b, a);
 	}
 
-	std::vector<int> largers(pairCnt);
-	for (int i = 0; i < pairCnt; ++i)
-		largers[i] = pairs[i].first;
-	fordJohnsonVec(largers);
+	std::vector<int> bigger(pairCount);
+	for (int i = 0; i < pairCount; ++i)
+		bigger[i] = pairs[i].first;
+	fordJohnson(bigger);
 
-	std::vector<std::pair<int, int> >	sorted(pairCnt);
-	std::vector<bool>					used(pairCnt, false);
-	for (int i = 0; i < pairCnt; ++i)
+	std::vector<std::pair<int, int> >	sorted(pairCount);
+	std::vector<bool>					matched(pairCount, false);
+	for (int i = 0; i < pairCount; ++i)
 	{
-		for (int j = 0; j < pairCnt; ++j)
+		for (int j = 0; j < pairCount; ++j)
 		{
-			if (!used[j] && pairs[j].first == largers[i])
+			if (!matched[j] && pairs[j].first == bigger[i])
 			{
 				sorted[i] = pairs[j];
-				used[j]   = true;
+				matched[j] = true;
 				break;
 			}
 		}
@@ -99,92 +103,87 @@ static void fordJohnsonVec(std::vector<int>& v)
 
 	std::vector<int> chain;
 	chain.push_back(sorted[0].second);
-	for (int i = 0; i < pairCnt; ++i)
+	for (int i = 0; i < pairCount; ++i)
 		chain.push_back(sorted[i].first);
 
-	std::vector<int> pend;
-	for (int i = 1; i < pairCnt; ++i)
-		pend.push_back(sorted[i].second);
-	if (hasOdd)
-		pend.push_back(oddVal);
+	std::vector<int> rest;
+	for (int i = 1; i < pairCount; ++i)
+		rest.push_back(sorted[i].second);
+	if (hasExtra)
+		rest.push_back(extra);
 
-	int					pendN = (int)pend.size();
-	std::vector<int>	order = jacOrder(pendN);
+	std::vector<int> order = insertOrder((int)rest.size());
 
-	for (int k = 0; k < (int)order.size(); ++k)
+	for (std::size_t i = 0; i < order.size(); ++i)
 	{
-		int idx = order[k];
-		int val = pend[idx];
+		int idx   = order[i];
+		int value = rest[idx];
 
 		std::vector<int>::iterator bound = chain.end();
-		if (idx + 1 < pairCnt)
+		if (idx + 1 < pairCount)
 			bound = std::lower_bound(chain.begin(), chain.end(), sorted[idx + 1].first);
 
-		vecBinInsert(chain, val, bound);
+		insertSorted(chain, value, bound);
 	}
 
-	v = chain;
+	values = chain;
 }
 
-static void deqBinInsert(std::deque<int>& chain, int val,
-	std::deque<int>::iterator bound)
+static void insertSorted(std::deque<int>& chain, int value, std::deque<int>::iterator bound)
 {
-	std::deque<int>::iterator lo = chain.begin();
-	std::deque<int>::iterator hi = bound;
-	while (lo < hi)
+	std::deque<int>::iterator low  = chain.begin();
+	std::deque<int>::iterator high = bound;
+
+	while (low < high)
 	{
-		std::deque<int>::iterator mid = lo + std::distance(lo, hi) / 2;
-		if (*mid < val)
-			lo = mid + 1;
+		std::deque<int>::iterator mid = low + std::distance(low, high) / 2;
+		if (*mid < value)
+			low = mid + 1;
 		else
-			hi = mid;
+			high = mid;
 	}
-	chain.insert(lo, val);
+	chain.insert(low, value);
 }
 
-static void fordJohnsonDeq(std::deque<int>& v)
+static void fordJohnson(std::deque<int>& values)
 {
-	int n = (int)v.size();
-	if (n <= 1)
+	int size = (int)values.size();
+	if (size <= 1)
 		return;
-	if (n == 2)
+	if (size == 2)
 	{
-		if (v[0] > v[1])
-			std::swap(v[0], v[1]);
+		if (values[0] > values[1])
+			std::swap(values[0], values[1]);
 		return;
 	}
 
-	bool	hasOdd  = (n % 2) != 0;
-	int		oddVal  = hasOdd ? v[n - 1] : 0;
-	int		pairCnt = n / 2;
+	bool	hasExtra  = (size % 2) != 0;
+	int		extra     = hasExtra ? values[size - 1] : 0;
+	int		pairCount = size / 2;
 
-	std::vector<std::pair<int, int> > pairs(pairCnt);
-	for (int i = 0; i < pairCnt; ++i)
+	std::vector<std::pair<int, int> > pairs(pairCount);
+	for (int i = 0; i < pairCount; ++i)
 	{
-		int a = v[2 * i];
-		int b = v[2 * i + 1];
+		int a = values[2 * i];
+		int b = values[2 * i + 1];
 		pairs[i] = (a >= b) ? std::make_pair(a, b) : std::make_pair(b, a);
 	}
 
-	std::vector<int> largers(pairCnt);
-	for (int i = 0; i < pairCnt; ++i)
-		largers[i] = pairs[i].first;
+	std::deque<int> bigger(pairCount);
+	for (int i = 0; i < pairCount; ++i)
+		bigger[i] = pairs[i].first;
+	fordJohnson(bigger);
 
-	std::vector<int> tmp(largers.begin(), largers.end());
-	fordJohnsonVec(tmp);
-	for (int i = 0; i < pairCnt; ++i)
-		largers[i] = tmp[i];
-
-	std::vector<std::pair<int, int> >	sorted(pairCnt);
-	std::vector<bool>					used(pairCnt, false);
-	for (int i = 0; i < pairCnt; ++i)
+	std::vector<std::pair<int, int> >	sorted(pairCount);
+	std::vector<bool>					matched(pairCount, false);
+	for (int i = 0; i < pairCount; ++i)
 	{
-		for (int j = 0; j < pairCnt; ++j)
+		for (int j = 0; j < pairCount; ++j)
 		{
-			if (!used[j] && pairs[j].first == largers[i])
+			if (!matched[j] && pairs[j].first == bigger[i])
 			{
 				sorted[i] = pairs[j];
-				used[j]   = true;
+				matched[j] = true;
 				break;
 			}
 		}
@@ -192,48 +191,46 @@ static void fordJohnsonDeq(std::deque<int>& v)
 
 	std::deque<int> chain;
 	chain.push_back(sorted[0].second);
-	for (int i = 0; i < pairCnt; ++i)
+	for (int i = 0; i < pairCount; ++i)
 		chain.push_back(sorted[i].first);
 
-	std::vector<int> pend;
-	for (int i = 1; i < pairCnt; ++i)
-		pend.push_back(sorted[i].second);
-	if (hasOdd)
-		pend.push_back(oddVal);
+	std::vector<int> rest;
+	for (int i = 1; i < pairCount; ++i)
+		rest.push_back(sorted[i].second);
+	if (hasExtra)
+		rest.push_back(extra);
 
-	int					pendN = (int)pend.size();
-	std::vector<int>	order = jacOrder(pendN);
+	std::vector<int> order = insertOrder((int)rest.size());
 
-	for (int k = 0; k < (int)order.size(); ++k)
+	for (std::size_t i = 0; i < order.size(); ++i)
 	{
-		int idx = order[k];
-		int val = pend[idx];
+		int idx   = order[i];
+		int value = rest[idx];
 
 		std::deque<int>::iterator bound = chain.end();
-		if (idx + 1 < pairCnt)
+		if (idx + 1 < pairCount)
 			bound = std::lower_bound(chain.begin(), chain.end(), sorted[idx + 1].first);
 
-		deqBinInsert(chain, val, bound);
+		insertSorted(chain, value, bound);
 	}
 
-	for (int i = 0; i < (int)chain.size(); ++i)
-		v[i] = chain[i];
+	values = chain;
 }
 
-PmergeMe::PmergeMe() : _vecTime(0.0), _deqTime(0.0) {}
+PmergeMe::PmergeMe() : _vectorTime(0.0), _dequeTime(0.0) {}
 
 PmergeMe::PmergeMe(const PmergeMe& other)
-	: _vec(other._vec), _deq(other._deq),
-	  _vecTime(other._vecTime), _deqTime(other._deqTime) {}
+	: _vector(other._vector), _deque(other._deque),
+	  _vectorTime(other._vectorTime), _dequeTime(other._dequeTime) {}
 
 PmergeMe& PmergeMe::operator=(const PmergeMe& other)
 {
 	if (this != &other)
 	{
-		_vec     = other._vec;
-		_deq     = other._deq;
-		_vecTime = other._vecTime;
-		_deqTime = other._deqTime;
+		_vector     = other._vector;
+		_deque      = other._deque;
+		_vectorTime = other._vectorTime;
+		_dequeTime  = other._dequeTime;
 	}
 	return *this;
 }
@@ -248,28 +245,30 @@ void PmergeMe::parseInput(int argc, char** argv)
 		long				n;
 		if (!(iss >> n) || n <= 0 || n > INT_MAX)
 			throw std::runtime_error("Error");
+
 		std::string leftover;
 		if (iss >> leftover)
 			throw std::runtime_error("Error");
-		_vec.push_back((int)n);
-		_deq.push_back((int)n);
+
+		_vector.push_back((int)n);
+		_deque.push_back((int)n);
 	}
 }
 
 void PmergeMe::sortVector()
 {
 	clock_t start = clock();
-	fordJohnsonVec(_vec);
-	clock_t end   = clock();
-	_vecTime = (double)(end - start) / CLOCKS_PER_SEC * 1e6;
+	fordJohnson(_vector);
+	clock_t end = clock();
+	_vectorTime = (double)(end - start) / CLOCKS_PER_SEC * 1e6;
 }
 
 void PmergeMe::sortDeque()
 {
 	clock_t start = clock();
-	fordJohnsonDeq(_deq);
-	clock_t end   = clock();
-	_deqTime = (double)(end - start) / CLOCKS_PER_SEC * 1e6;
+	fordJohnson(_deque);
+	clock_t end = clock();
+	_dequeTime = (double)(end - start) / CLOCKS_PER_SEC * 1e6;
 }
 
 void PmergeMe::sort()
@@ -280,21 +279,20 @@ void PmergeMe::sort()
 
 void PmergeMe::display(bool after) const
 {
-	const std::vector<int>& seq = _vec;
 	std::cout << (after ? "After:  " : "Before: ");
-	for (std::size_t i = 0; i < seq.size(); ++i)
+	for (std::size_t i = 0; i < _vector.size(); ++i)
 	{
 		if (i)
 			std::cout << " ";
-		std::cout << seq[i];
+		std::cout << _vector[i];
 	}
 	std::cout << std::endl;
 }
 
 void PmergeMe::printTimes() const
 {
-	std::cout << "Time to process a range of " << _vec.size()
-		<< " elements with std::vector : " << _vecTime << " us" << std::endl;
-	std::cout << "Time to process a range of " << _deq.size()
-		<< " elements with std::deque  : " << _deqTime << " us" << std::endl;
+	std::cout << "Time to process a range of " << _vector.size()
+		<< " elements with std::vector : " << _vectorTime << " us" << std::endl;
+	std::cout << "Time to process a range of " << _deque.size()
+		<< " elements with std::deque  : " << _dequeTime << " us" << std::endl;
 }

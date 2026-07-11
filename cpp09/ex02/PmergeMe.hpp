@@ -8,10 +8,10 @@
 class PmergeMe
 {
 private:
-	std::vector<int>	_vec;
-	std::deque<int>		_deq;
-	double				_vecTime;
-	double				_deqTime;
+	std::vector<int>	_vector;
+	std::deque<int>		_deque;
+	double				_vectorTime;
+	double				_dequeTime;
 
 	void	sortVector();
 	void	sortDeque();

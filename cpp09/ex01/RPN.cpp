@@ -33,27 +33,27 @@ int RPN::evaluate(const std::string& expr)
 		{
 			if (_stack.size() < 2)
 				throw std::runtime_error("Error");
-			int b = _stack.top();
+
+			int right = _stack.top();
 			_stack.pop();
-			int a = _stack.top();
+			int left = _stack.top();
 			_stack.pop();
+
 			if (token == "+")
-				_stack.push(a + b);
+				_stack.push(left + right);
 			else if (token == "-")
-				_stack.push(a - b);
+				_stack.push(left - right);
 			else if (token == "*")
-				_stack.push(a * b);
+				_stack.push(left * right);
 			else
 			{
-				if (b == 0)
+				if (right == 0)
 					throw std::runtime_error("Error: division by zero");
-				_stack.push(a / b);
+				_stack.push(left / right);
 			}
 		}
 		else
-		{
 			throw std::runtime_error("Error");
-		}
 	}
 
 	if (_stack.size() != 1)
